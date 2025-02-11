@@ -8,7 +8,7 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       body: Column(
         children: [
-          Text("hello,world"),
+          Text("hello,worldd"),
         ],
       ),
     );
