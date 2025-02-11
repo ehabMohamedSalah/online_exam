@@ -29,7 +29,6 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   cupertino_icons: ^1.0.2
-  flutter_stripe: any
 
   fluttertoast: any
   carousel_slider: ^4.2.1
@@ -37,8 +36,6 @@ dependencies:
   dartz: ^0.10.1
   cached_network_image: ^3.3.1
   flutter_bloc: ^8.1.5
-  flutter_paypal_payment: ^1.0.6
-  flutter_credit_card: ^4.0.1
   provider: ^6.1.2
 
   bloc: ^8.1.4
@@ -47,12 +44,11 @@ dependencies:
   # add get_it
   get_it:
   flutter_svg: ^2.0.10+1
-  shared_preferences: ^2.2.3
-  jwt_decoder: ^2.0.1
-  font_awesome_flutter: ^10.7.0
+
 
   flutter:
     sdk: flutter
+  dio: ^5.8.0+1
 
 
   # The following adds the Cupertino Icons font to your application.
