@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:online_exam/presentation/auth/login/view/login_screen.dart';
 import 'package:online_exam/presentation/home/view/homeSceen.dart';
 
+import 'config/theme/app_theme.dart';
 import 'core/di/di.dart';
 import 'core/utils/routes_manager.dart';
 
@@ -17,7 +19,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
-      designSize: const Size(430, 932),
+      designSize:   Size(430, 932),
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (context, child) {
@@ -25,9 +27,10 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           routes:{
             RouteManager.homeScreen:(context) => HomeScreen(),
-
+              RouteManager.loginScreen:(context) => LoginScreen(),
           },
-          initialRoute:  RouteManager.homeScreen ,
+          initialRoute:  RouteManager.loginScreen ,
+          theme:AppTheme.lightTheme ,
 
 
         );

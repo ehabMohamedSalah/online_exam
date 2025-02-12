@@ -1,3 +1,4 @@
 class RouteManager{
-static const String homeScreen="/homescreen";
+static const String homeScreen="/HOMESCREEN";
+static const String loginScreen="/LOGINSCREEN";
 }

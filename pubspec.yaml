@@ -29,7 +29,6 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   cupertino_icons: ^1.0.2
-
   fluttertoast: any
   carousel_slider: ^4.2.1
   flutter_screenutil: ^5.9.0
@@ -37,9 +36,7 @@ dependencies:
   cached_network_image: ^3.3.1
   flutter_bloc: ^8.1.5
   provider: ^6.1.2
-
   bloc: ^8.1.4
-
   injectable:
   # add get_it
   get_it:
