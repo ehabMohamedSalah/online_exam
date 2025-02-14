@@ -4,10 +4,12 @@ import 'package:online_exam/presentation/auth/login/view/login_screen.dart';
 import 'package:online_exam/presentation/home/view/homeSceen.dart';
 
 import 'config/theme/app_theme.dart';
+import 'core/api/api_manager.dart';
 import 'core/di/di.dart';
 import 'core/utils/routes_manager.dart';
 
 void main() {
+  ApiManager.init();
   configureDependencies();
   runApp(const MyApp());
 }
