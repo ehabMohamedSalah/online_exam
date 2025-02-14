@@ -53,6 +53,11 @@ class AppTheme{
         ),
 
 
+        bodyMedium:  TextStyle(
+          fontWeight:FontWeight.w600,
+          fontSize: 16.sp,
+          color: Colors.black,
+        ),
 
 
 
