@@ -7,10 +7,10 @@ final class LoginViewModelInitial extends LoginViewModelState {}
 
 class Loginloading extends LoginViewModelState{}
 class LoginErorr extends LoginViewModelState{
-  String ErrorMessage;
-  LoginErorr(this.ErrorMessage);
+  ErrorApiResult exp;
+  LoginErorr(this.exp);
 }
 class LoginSuccess extends LoginViewModelState{
-  LoginResponseEntity AuthEntity;
-  LoginSuccess(this.AuthEntity);
+  SuccessApiResult<LoginResponse> response;
+  LoginSuccess(this.response);
 }

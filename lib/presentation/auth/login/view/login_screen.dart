@@ -13,32 +13,30 @@ import '../../../../core/resuable-comp/text_button.dart';
 import '../../../../core/utils/string_manager.dart';
 
 class LoginScreen extends StatefulWidget {
-
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-
-   late TextEditingController emailContrller;
-   late TextEditingController passwordController;
-   bool rememberMe = false; // الحالة الافتراضية
+  late TextEditingController emailContrller;
+  late TextEditingController passwordController;
+  bool rememberMe = false; // الحالة الافتراضية
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  LoginViewModelCubit viewModel= getIt<LoginViewModelCubit>();
 
-   @override
-   void initState() {
-     // TODO: implement initState
-     super.initState();
-     emailContrller = TextEditingController();
-     passwordController = TextEditingController();
-   }
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    emailContrller = TextEditingController();
+    passwordController = TextEditingController();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (BuildContext context)=>getIt<LoginViewModelCubit>(),
-      child: Scaffold(
-        
+    return BlocProvider.value(
+      value: viewModel,
+       child: Scaffold(
         body: SingleChildScrollView(
           child: Padding(
             padding: REdgeInsets.all(20.0),
@@ -46,40 +44,46 @@ class _LoginScreenState extends State<LoginScreen> {
               key: formKey,
               child: Column(
                 children: [
-                  SizedBox(height: 30.h,),
-                  AppBarWidget( onpressed: ( ) {},),
-                  SizedBox(height: 20.h,),
+                  SizedBox(
+                    height: 30.h,
+                  ),
+                  AppBarWidget(
+                    onpressed: () {},
+                  ),
+                  SizedBox(
+                    height: 20.h,
+                  ),
                   CustomTextField(
                     labelText: StringManager.email,
                     hintText: StringManager.enterYourEmail,
                     obscureText: false,
                     controller: emailContrller,
                     keyboard: TextInputType.emailAddress,
-                    validator: (value){
+                    validator: (value) {
                       if (!Constant.regexEmail.hasMatch(value ?? "")) {
                         return StringManager.notValidEmail;
                       }
                     },
-              
                   ),
-                  SizedBox(height: 20.h,),
+                  SizedBox(
+                    height: 20.h,
+                  ),
                   CustomTextField(
-
                       labelText: StringManager.password,
                       hintText: StringManager.enterYourPassowrd,
                       controller: passwordController,
                       keyboard: TextInputType.visiblePassword,
-                      validator: (value){
+                      validator: (value) {
                         if ((value?.length ?? 0) < 7) {
                           return StringManager.notValidPass;
                         }
                       },
-                      obscureText: false
+                      obscureText: false),
+                  SizedBox(
+                    height: 20.h,
                   ),
-                  SizedBox(height: 20.h,),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              
                     children: [
                       Row(
                         children: [
@@ -91,15 +95,26 @@ class _LoginScreenState extends State<LoginScreen> {
                               });
                             },
                           ),
-                          SizedBox(width: 8.w), // إضافة مسافة صغيرة بين المربع والنص
-                          Text(StringManager.rememberMe,style: Theme.of(context).textTheme.bodyMedium,),
+                          SizedBox(
+                              width: 8.w), // إضافة مسافة صغيرة بين المربع والنص
+                          Text(
+                            StringManager.rememberMe,
+                            style: Theme.of(context).textTheme.bodyMedium,
+                          ),
                         ],
                       ),
-                      Text(StringManager.forgetPass,style: Theme.of(context).textTheme.bodyMedium?.copyWith(decoration: TextDecoration.underline,decorationThickness: 2.0),)
+                      Text(
+                        StringManager.forgetPass,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            decoration: TextDecoration.underline,
+                            decorationThickness: 2.0),
+                      )
                     ],
                   ),
-                  SizedBox(height: 50.h,),
-                  BlocConsumer<LoginViewModelCubit,LoginViewModelState>(
+                  SizedBox(
+                    height: 50.h,
+                  ),
+                   BlocConsumer<LoginViewModelCubit,LoginViewModelState>(
                     listener: (context, state) {
                           if(state is LoginSuccess){
                             Fluttertoast.showToast(
@@ -116,7 +131,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           }
                           if (state is LoginErorr) {
                             Fluttertoast.showToast(
-                                msg: state.ErrorMessage,
+                                msg: state.exp.exception.toString(),
                                 toastLength: Toast.LENGTH_SHORT,
                                 gravity: ToastGravity.CENTER,
                                 timeInSecForIosWeb: 1,
@@ -125,39 +140,67 @@ class _LoginScreenState extends State<LoginScreen> {
                                 fontSize: 16.0);
                           }
                     },
-                      builder:  (context, state) {
-                        if(state is Loginloading){
-                          return Center(child: CircularProgressIndicator(),);
-                        }
+                     builder: (context, state) {
+                       switch (state) {
+                          case Loginloading():
+                           return CircularProgressIndicator();
+                         case LoginErorr():
+                           return Text("Error, please try again!");
+                         default:
+                           return CustomTextButton(
+                             text: StringManager.login,
+                             onPressed: () {
 
-                        return   CustomTextButton(
-                            text: StringManager.login,
-                            onPressed: (){
-                              if (formKey.currentState?.validate() == true) {
-                                // ✅ if data is correct
-                                  LoginViewModelCubit.get(context).login(  password: passwordController.text, email: emailContrller.text);
+                                 if (formKey.currentState?.validate() == true) {
+                                   // ✅ استدعاء login
 
-                              } else {
-                                // ❌  law fshlt
-                                print("please enter a correct data");
-                              }
-                            });
-                      },
+                                    var response= LoginViewModelCubit.get(context).login(
+                                       email: emailContrller.text,
+                                       password: passwordController.text,
+                                     );
+                                    if(response==LoginSuccess){
+                                      Navigator.pushNamedAndRemoveUntil(context,
+                                          RouteManager.homeScreen, (route) => false);
+                                    }
+
+
+
+
+                               } else {
+                                 // ❌ لو البيانات غير صحيحة
+                                 print("Please enter correct data");
+                               }
+                             },
+                           );
+                       }
+                     },
 
                   ),
 
-                  SizedBox(height: 20.h,),
+
+                  SizedBox(
+                    height: 20.h,
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(StringManager.dontHaveAnAcc,style: Theme.of(context).textTheme.bodyMedium,),
-                      SizedBox(width: 5.w,),
-                      Text(StringManager.signUp,style: TextStyle(color: ColorManager.primaryColor,fontWeight: FontWeight.bold,decoration: TextDecoration.underline,decorationThickness: 2.0),),
-              
+                      Text(
+                        StringManager.dontHaveAnAcc,
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                      SizedBox(
+                        width: 5.w,
+                      ),
+                      Text(
+                        StringManager.signUp,
+                        style: TextStyle(
+                            color: ColorManager.primaryColor,
+                            fontWeight: FontWeight.bold,
+                            decoration: TextDecoration.underline,
+                            decorationThickness: 2.0),
+                      ),
                     ],
                   )
-                  
-              
                 ],
               ),
             ),

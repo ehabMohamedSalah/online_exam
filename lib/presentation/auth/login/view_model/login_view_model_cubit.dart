@@ -2,7 +2,9 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:meta/meta.dart';
+import 'package:online_exam/data/model/Auth/LoginResponse.dart';
 import 'package:online_exam/domain/entity/Auth/login_response_entity/login_response.dart';
+import '../../../../core/api/api_result.dart';
 import '../../../../domain/usecase/login_usecase.dart';
 part 'login_view_model_state.dart';
 
@@ -16,14 +18,25 @@ class LoginViewModelCubit extends Cubit<LoginViewModelState> {
   static LoginViewModelCubit get(context){
     return BlocProvider.of(context);
   }
-  login({required String email,required String password})async{
-    emit(Loginloading());
+
+
+  Future<void> login({required String email,required String password})async{
+
    var response= await loginUseCase.call(email:email,password:password);
-   response.fold(
-           (AuthEntity) => emit(LoginSuccess(AuthEntity)), 
-           (err) => emit(LoginErorr(err)),
-   );
-  }
+    switch(response){
+      case SuccessApiResult<LoginResponse>():
+        emit(
+          LoginSuccess(
+            response,
+          ),
+        );
+      case ErrorApiResult<LoginResponse>():
+        emit(
+          LoginErorr(
+            ErrorApiResult(response.exception),
+          ),
+        );
 
 
-}
+}}}
+

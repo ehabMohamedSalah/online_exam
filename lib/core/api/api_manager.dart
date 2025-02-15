@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 
@@ -29,7 +31,8 @@ class ApiManager{
     var response= await dio.post( endpoint, data: body,options: Options(
         headers: headers
     ));
-    return response;
+    log(response.statusCode.toString());
+    return  response;
   }
 
   Future< Response > put({ required String Endpoint,  Map<String, dynamic>? queryParameters, Map<String, dynamic>? headers})async{
