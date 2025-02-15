@@ -1,16 +1,16 @@
 import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
-import 'package:online_exam/domain/repo_contract/login_repo.dart';
 
-import '../entity/Auth/login_response_entity/login_response.dart';
+import '../../entity/Auth/auth_response.dart';
+import '../../repo_contract/auth_repo.dart';
 
 @injectable
 class LoginUseCase {
-  LoginRepo loginRepo;
+  AuthRepo loginRepo;
 
   LoginUseCase(this.loginRepo);
 
-  Future<Either<LoginResponseEntity, String>> call(
+  Future<Either<AuthResponseEntity, String>> call(
       {required String email, required String password}) {
     return loginRepo.Login(email: email, password: password);
   }

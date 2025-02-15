@@ -1,4 +1,4 @@
-import '../../../../domain/entity/Auth/login_response_entity/user_entity.dart';
+import '../../../domain/entity/Auth/user_entity.dart';
 
 /// _id : "67af710586a024f06ea26a31"
 /// username : "ehabsalah"

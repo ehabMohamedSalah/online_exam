@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:online_exam/presentation/auth/login/view/login_screen.dart';
+import 'package:online_exam/presentation/auth/signUp/view/signup_screen.dart';
 import 'package:online_exam/presentation/home/view/homeSceen.dart';
 
 import 'config/theme/app_theme.dart';
@@ -30,8 +31,10 @@ class MyApp extends StatelessWidget {
           routes:{
             RouteManager.homeScreen:(context) => HomeScreen(),
               RouteManager.loginScreen:(context) => LoginScreen(),
+            RouteManager.signUpscreen:(context) => Signupscreen(),
+
           },
-          initialRoute:  RouteManager.loginScreen ,
+          initialRoute:  RouteManager.signUpscreen ,
           theme:AppTheme.lightTheme ,
 
 

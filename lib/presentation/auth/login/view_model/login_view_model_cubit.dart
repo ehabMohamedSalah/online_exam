@@ -2,8 +2,8 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:meta/meta.dart';
-import 'package:online_exam/domain/entity/Auth/login_response_entity/login_response.dart';
-import '../../../../domain/usecase/login_usecase.dart';
+ import '../../../../domain/entity/Auth/auth_response.dart';
+import '../../../../domain/usecase/auth_usecase/login_usecase.dart';
 part 'login_view_model_state.dart';
 
 @injectable

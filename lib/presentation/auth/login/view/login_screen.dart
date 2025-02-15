@@ -47,7 +47,7 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Column(
                 children: [
                   SizedBox(height: 30.h,),
-                  AppBarWidget( onpressed: ( ) {},),
+                  AppBarWidget( onpressed: ( ) {}, title: '',),
                   SizedBox(height: 20.h,),
                   CustomTextField(
                     labelText: StringManager.email,

@@ -11,6 +11,6 @@ class LoginErorr extends LoginViewModelState{
   LoginErorr(this.ErrorMessage);
 }
 class LoginSuccess extends LoginViewModelState{
-  LoginResponseEntity AuthEntity;
+  AuthResponseEntity AuthEntity;
   LoginSuccess(this.AuthEntity);
 }
