@@ -18,32 +18,39 @@ class ApiManager{
           }
       ),);
   }
-  Future< Response > getRequest({ required String Endpoint,  Map<String, dynamic>? queryParameters, Map<String, dynamic>? headers})async{
-    var response=await dio.get( Endpoint,queryParameters: queryParameters,options: Options(
+
+  Future<Response> getRequest({required String Endpoint, Map<String, dynamic>? queryParameters, Map<String, dynamic>? headers}) async {
+    var response = await dio.get(Endpoint, queryParameters: queryParameters, options: Options(
       headers: headers,
     ));
     return response;
   }
 
-  Future<Response> postRequest({required String endpoint,Map<String, dynamic>? body,Map<String, dynamic>? headers})async{
-    var response= await dio.post( endpoint, data: body,options: Options(
+  Future<Response> postRequest({required String endpoint, Map<String, dynamic>? body, Map<String, dynamic>? headers}) async {
+    var response = await dio.post(endpoint, data: body, options: Options(
         headers: headers
     ));
     return response;
   }
 
-  Future< Response > put({ required String Endpoint,  Map<String, dynamic>? queryParameters, Map<String, dynamic>? headers})async{
-    var response=await dio.put( Endpoint,queryParameters: queryParameters,options: Options(
+  Future<Response> put({required String Endpoint, Map<String, dynamic>? queryParameters, Map<String, dynamic>? headers}) async {
+    var response = await dio.put(Endpoint, queryParameters: queryParameters, options: Options(
       headers: headers,
     ));
     return response;
   }
 
-  Future< Response > delete({ required String Endpoint,  Map<String, dynamic>? queryParameters, Map<String, dynamic>? headers})async{
-    var response=await dio.delete( Endpoint,queryParameters: queryParameters,options: Options(
+  Future<Response> delete({required String Endpoint, Map<String, dynamic>? queryParameters, Map<String, dynamic>? headers}) async {
+    var response = await dio.delete(Endpoint, queryParameters: queryParameters, options: Options(
       headers: headers,
     ));
     return response;
   }
 
+  Future<Response> patchRequest({required String endpoint, Map<String, dynamic>? body, Map<String, dynamic>? headers}) async {
+    var response = await dio.patch(endpoint, data: body, options: Options(
+      headers: headers,
+    ));
+    return response;
+  }
 }
