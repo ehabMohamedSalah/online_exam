@@ -95,7 +95,11 @@ class _LoginScreenState extends State<LoginScreen> {
                           Text(StringManager.rememberMe,style: Theme.of(context).textTheme.bodyMedium,),
                         ],
                       ),
-                      Text(StringManager.forgetPass,style: Theme.of(context).textTheme.bodyMedium?.copyWith(decoration: TextDecoration.underline,decorationThickness: 2.0),)
+                      InkWell(
+                          onTap: (){
+                            Navigator.pushNamed(context, RouteManager.emailScreen);
+                          },
+                          child: Text(StringManager.forgetPass,style: Theme.of(context).textTheme.bodyMedium?.copyWith(decoration: TextDecoration.underline,decorationThickness: 2.0),))
                     ],
                   ),
                   SizedBox(height: 50.h,),
