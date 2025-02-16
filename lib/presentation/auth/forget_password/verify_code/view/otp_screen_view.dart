@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:online_exam/core/di/di.dart';
 import 'package:online_exam/core/resuable-comp/app_bar.dart';
@@ -7,7 +8,6 @@ import 'package:online_exam/core/utils/colors_manager.dart';
 import 'package:online_exam/core/utils/routes_manager.dart';
 import 'package:online_exam/core/utils/string_manager.dart';
 import 'package:online_exam/presentation/auth/login/view_model/login_view_model_cubit.dart';
-import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 
 class OtpScreen extends StatefulWidget {
   const OtpScreen({super.key});
