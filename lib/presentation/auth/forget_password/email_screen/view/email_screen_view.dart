@@ -43,8 +43,7 @@ class _EmailScreenState extends State<EmailScreen> {
               AppBarWidget(
                 onpressed: () {
                   Navigator.pushNamed(context, RouteManager.loginScreen);
-                },
-                // text: StringManager.password,
+                }, title: StringManager.password,
               ),
               SizedBox(
                 height: 40.h,

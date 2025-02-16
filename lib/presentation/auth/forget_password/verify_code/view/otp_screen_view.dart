@@ -30,8 +30,7 @@ class _OtpScreenState extends State<OtpScreen> {
               AppBarWidget(
                 onpressed: () {
                   Navigator.pushNamed(context, RouteManager.emailScreen);
-                },
-                // text: StringManager.password,
+                }, title: StringManager.password,
               ),
               SizedBox(
                 height: 40.h,

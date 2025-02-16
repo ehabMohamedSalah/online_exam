@@ -47,7 +47,7 @@ class _ForgetpasswordScreenState extends State<ForgetpasswordScreen> {
                   onpressed: () {
                     Navigator.pushNamed(context, RouteManager.otpScreen);
                   },
-                  // text: StringManager.password,
+                  title: StringManager.password,
                 ),
                 SizedBox(
                   height: 40.h,
