@@ -1,36 +1,17 @@
-import 'package:online_exam/domain/entity/Auth/verify_response_entity/verify_response.dart';
-
-/// resetCode : "429392"
+/// status : "Success"
 
 class VerifyResponse {
-  String? message;
-  int? code;
-  String? token;
-  String? resetCode;
+  String? status;
 
-  VerifyResponse({this.resetCode, this.token, this.message, this.code});
+  VerifyResponse({this.status});
 
   VerifyResponse.fromJson(dynamic json) {
-    message = json['message'];
-    code = json['code'];
-    token = json['token'];
-    resetCode = json['resetCode'];
+    status = json['status'];
   }
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
-    map['message'] = message;
-    map['code'] = code;
-    map['token'] = token;
-    map['resetCode'] = resetCode;
+    map['status'] = status;
     return map;
-  }
-
-  VerifyResponseEntity toVerifyResponseEntity() {
-    return VerifyResponseEntity(
-      message: message,
-      code: code,
-      resetCode: resetCode,
-    );
   }
 }
