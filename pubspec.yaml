@@ -41,7 +41,7 @@ dependencies:
   # add get_it
   get_it:
   flutter_svg: ^2.0.10+1
-  flutter_otp_text_field: ^1.4.0+2
+  flutter_otp_text_field: any
 
 
   flutter:

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:online_exam/presentation/auth/forget_password/confirm_password/view/forgetpassword_screen_view.dart';
-import 'package:online_exam/presentation/auth/forget_password/email_screen/view/email_screen_view.dart';
-import 'package:online_exam/presentation/auth/forget_password/verify_code/view/otp_screen_view.dart';
+import 'package:online_exam/presentation/auth/forget_password/forget_password/view/forget_screen_view.dart';
+ import 'package:online_exam/presentation/auth/forget_password/verify_code/view/otp_screen_view.dart';
 import 'package:online_exam/presentation/auth/login/view/login_screen.dart';
 import 'package:online_exam/presentation/auth/signUp/view/signup_screen.dart';
 import 'package:online_exam/presentation/home/view/homeSceen.dart';
@@ -34,9 +34,9 @@ class MyApp extends StatelessWidget {
           routes:{
             RouteManager.homeScreen:(context) => HomeScreen(),
             RouteManager.loginScreen:(context) => LoginScreen(),
-            RouteManager.emailScreen:(context) => EmailScreen(),
-            RouteManager.forgetPassScreen:(context) => ForgetpasswordScreen(),
-            RouteManager.otpScreen:(context) => OtpScreen(),
+            RouteManager.changePassScreen:(context) => ChangePasswordScreen(),
+            RouteManager.forgetPassScreen:(context) => ForgetPasswordScreen(),
+             RouteManager.otpScreen:(context) => OtpScreen(),
               RouteManager.loginScreen:(context) => LoginScreen(),
             RouteManager.signUpscreen:(context) => Signupscreen(),
 

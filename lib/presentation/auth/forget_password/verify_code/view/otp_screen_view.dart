@@ -29,7 +29,7 @@ class _OtpScreenState extends State<OtpScreen> {
             children: [
               AppBarWidget(
                 onpressed: () {
-                  Navigator.pushNamed(context, RouteManager.emailScreen);
+                  Navigator.pushNamed(context, RouteManager.forgetPassScreen);
                 }, title: StringManager.password,
               ),
               SizedBox(

@@ -1,10 +1,14 @@
 
 import 'package:dartz/dartz.dart';
+import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 import 'package:online_exam/core/api/api_manager.dart';
+import 'package:online_exam/core/api/api_result.dart';
 import 'package:online_exam/core/api/endpoints.dart';
 import 'package:online_exam/data/datasource_contract/auth_datasource.dart';
 import 'package:online_exam/data/model/Auth/authResponse.dart';
+import 'package:online_exam/data/model/Auth/forget_passowrd/ForgetPasswordResponse.dart';
+import 'package:online_exam/domain/entity/Auth/foreget_pass_entity/ForgetPassEntity.dart';
 
 @Injectable(as:AuthDatasource )
 class AuthDatasourceImpl extends AuthDatasource{
@@ -53,4 +57,22 @@ class AuthDatasourceImpl extends AuthDatasource{
       return right(err.toString());
     }
   
-}}
+}
+
+  @override
+    Future<ApiResult<ForgetPasswordEntity>> ForgetPassword({required String email}) async{
+    try{
+      var response=await apiManager.postRequest(
+          endpoint: EndPoint.ForgetPasswordEndpoints, body:  {
+        "email":email,
+      }      );
+      ForgetPasswordResponse forgetResponse =ForgetPasswordResponse.fromJson(response.data) ;
+      ForgetPasswordEntity forgetPasswordEntity=forgetResponse.toForgetPasswordEntity();
+      return SuccessApiResult(forgetPasswordEntity);
+    } on DioException catch (e) {
+      return ErrorApiResult(e);
+    }
+
+
+
+  }}

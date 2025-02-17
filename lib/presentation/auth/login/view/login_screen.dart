@@ -100,7 +100,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       InkWell(
                           onTap: (){
-                            Navigator.pushNamed(context, RouteManager.emailScreen);
+                            Navigator.pushNamed(context, RouteManager.forgetPassScreen);
                           },
                           child: Text(StringManager.forgetPass,style: Theme.of(context).textTheme.bodyMedium?.copyWith(decoration: TextDecoration.underline,decorationThickness: 2.0),))
                     ],

@@ -1,4 +1,4 @@
-import 'package:online_exam/domain/entity/Auth/auth_response.dart';
+import 'package:online_exam/domain/entity/Auth/auth_response/auth_response.dart';
 
 import 'user_model.dart';
 

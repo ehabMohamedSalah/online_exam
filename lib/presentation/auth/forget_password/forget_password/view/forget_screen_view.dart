@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:online_exam/core/constant.dart';
 import 'package:online_exam/core/di/di.dart';
 import 'package:online_exam/core/resuable-comp/app_bar.dart';
@@ -9,16 +10,17 @@ import 'package:online_exam/core/resuable-comp/text_button.dart';
 import 'package:online_exam/core/utils/colors_manager.dart';
 import 'package:online_exam/core/utils/routes_manager.dart';
 import 'package:online_exam/core/utils/string_manager.dart';
+import 'package:online_exam/presentation/auth/forget_password/forget_password/view_model/forget_password_view_model_cubit.dart';
 import 'package:online_exam/presentation/auth/login/view_model/login_view_model_cubit.dart';
 
-class EmailScreen extends StatefulWidget {
-  const EmailScreen({super.key});
+class ForgetPasswordScreen extends StatefulWidget {
+  const ForgetPasswordScreen({super.key});
 
   @override
-  State<EmailScreen> createState() => _EmailScreenState();
+  State<ForgetPasswordScreen> createState() => _ForgetPasswordScreenState();
 }
 
-class _EmailScreenState extends State<EmailScreen> {
+class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
   late TextEditingController emailContrller;
   bool rememberMe = false;
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -34,7 +36,7 @@ class _EmailScreenState extends State<EmailScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlocProvider(
-        create: (BuildContext context) => getIt<LoginViewModelCubit>(),
+        create: (BuildContext context) => getIt<ForgetPasswordViewModelCubit>(),
         child: Padding(
           padding: const EdgeInsets.all(20),
           child: Column(
@@ -84,15 +86,45 @@ class _EmailScreenState extends State<EmailScreen> {
               SizedBox(
                 height: 48.h,
               ),
-              CustomTextButton(
-                onPressed: () {
-                  Navigator.pushNamed(
-                    context,
-                    RouteManager.otpScreen,
-                  );
+              BlocConsumer<ForgetPasswordViewModelCubit,ForgetPasswordViewModelState>(
+                listener: (context, state) {
+                  switch (state.runtimeType) {
+                    case ForgetPasswordSuccess:
+                      Fluttertoast.showToast(
+                        msg: "✅ otp send to your email!",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.CENTER,
+                        backgroundColor: Colors.green,
+                        textColor: Colors.white,
+                      );
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, RouteManager.otpScreen, (route) => false);
+                      break;
+                    case ForgetPasswordErorr:
+                      String errorMessage =(state as ForgetPasswordErorr).exp.exception.toString();
+                      Fluttertoast.showToast(
+                        msg: errorMessage,
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.CENTER,
+                        backgroundColor: Colors.red,
+                        textColor: Colors.white,
+                      );
+                      break;
+                  }
                 },
-                text: 'Continue',
-              )
+                builder: (context, state) {
+                        switch (state) {
+                            case ForgetPasswordloading:
+                            return CircularProgressIndicator();
+                            default:
+                                return CustomTextButton(
+                                      onPressed: () {
+                                     ForgetPasswordViewModelCubit.get(context).ForgetPassword(email: emailContrller.toString());
+                                      },
+                                      text: 'Continue',
+                                );
+
+                        }})
             ],
           ),
         ),

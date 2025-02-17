@@ -11,14 +11,14 @@ import 'package:online_exam/core/utils/routes_manager.dart';
 import 'package:online_exam/core/utils/string_manager.dart';
 import 'package:online_exam/presentation/auth/login/view_model/login_view_model_cubit.dart';
 
-class ForgetpasswordScreen extends StatefulWidget {
-  const ForgetpasswordScreen({super.key});
+class ChangePasswordScreen extends StatefulWidget {
+  const ChangePasswordScreen({super.key});
 
   @override
-  State<ForgetpasswordScreen> createState() => _ForgetpasswordScreenState();
+  State<ChangePasswordScreen> createState() => _ChangePasswordScreenState();
 }
 
-class _ForgetpasswordScreenState extends State<ForgetpasswordScreen> {
+class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   late TextEditingController newPasswordContrller;
   late TextEditingController confirmPasswordController;
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
