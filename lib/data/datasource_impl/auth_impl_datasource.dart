@@ -11,37 +11,36 @@ import 'package:online_exam/data/model/Auth/forget_passowrd/ForgetPasswordRespon
 import 'package:online_exam/domain/entity/Auth/foreget_pass_entity/ForgetPassEntity.dart';
 
 @Injectable(as:AuthDatasource )
-class AuthDatasourceImpl extends AuthDatasource{
+class AuthDatasourceImpl extends AuthDatasource {
   @factoryMethod
   ApiManager apiManager;
+
   AuthDatasourceImpl(this.apiManager);
-  
+
   @override
-  Future<Either<AuthResponseModel, String>> Login({required String email, required String password})async {
-    try{
-      var response=await apiManager.postRequest(
-          endpoint: EndPoint.signInEndpoint, body:  {
-        "email":email,
-        "password":password
-      }      );
-      AuthResponseModel loginResponse =AuthResponseModel.fromJson(response.data) ;
-      if(loginResponse.code!=null)return right(loginResponse.message??"");
+  Future<Either<AuthResponseModel, String>> Login(
+      {required String email, required String password}) async {
+    try {
+      var response = await apiManager.postRequest(
+          endpoint: EndPoint.signInEndpoint, body: {
+        "email": email,
+        "password": password
+      });
+      AuthResponseModel loginResponse = AuthResponseModel.fromJson(
+          response.data);
+      if (loginResponse.code != null) return right(loginResponse.message ?? "");
       return left(loginResponse);
-    }catch(err){
+    } catch (err) {
       return right(err.toString());
     }
-
-
-
-
-
   }
 
   @override
-  Future<Either<AuthResponseModel, String>> SignUp({required String username, required String firstName, required String lastName, required String email, required String password, required String rePassword, required String phone})async {
-    try{
-      var response=await apiManager.postRequest(
-          endpoint: EndPoint.signUpEndpoint, body:  {
+  Future<Either<AuthResponseModel, String>> SignUp(
+      {required String username, required String firstName, required String lastName, required String email, required String password, required String rePassword, required String phone}) async {
+    try {
+      var response = await apiManager.postRequest(
+          endpoint: EndPoint.signUpEndpoint, body: {
         "username": username,
         "firstName": firstName,
         "lastName": lastName,
@@ -49,30 +48,44 @@ class AuthDatasourceImpl extends AuthDatasource{
         "password": password,
         "rePassword": rePassword,
         "phone": phone,
-      }      );
-      AuthResponseModel signUpResponse =AuthResponseModel.fromJson(response.data) ;
-      if(signUpResponse.code!=null)return right(signUpResponse.message??"");
+      });
+      AuthResponseModel signUpResponse = AuthResponseModel.fromJson(
+          response.data);
+      if (signUpResponse.code != null)
+        return right(signUpResponse.message ?? "");
       return left(signUpResponse);
-    }catch(err){
+    } catch (err) {
       return right(err.toString());
     }
-  
-}
+  }
+
 
   @override
-    Future<ApiResult<ForgetPasswordEntity>> ForgetPassword({required String email}) async{
-    try{
-      var response=await apiManager.postRequest(
-          endpoint: EndPoint.ForgetPasswordEndpoints, body:  {
-        "email":email,
-      }      );
-      ForgetPasswordResponse forgetResponse =ForgetPasswordResponse.fromJson(response.data) ;
-      ForgetPasswordEntity forgetPasswordEntity=forgetResponse.toForgetPasswordEntity();
+  Future<ApiResult<ForgetPasswordEntity>> ForgetPassword(
+      {required String email}) async {
+    try {
+      var response = await apiManager.postRequest(
+        endpoint: EndPoint.ForgetPasswordEndpoints,
+        body: {"email": email},
+      );
+
+      ForgetPasswordResponse forgetResponse = ForgetPasswordResponse.fromJson(
+          response.data);
+      ForgetPasswordEntity forgetPasswordEntity = forgetResponse
+          .toForgetPasswordEntity();
+
+      // Ensure proper error handling
+      if (forgetPasswordEntity.code != null) {
+        return ErrorApiResult(Exception(
+            forgetPasswordEntity.message ?? "Unknown error occurred"));
+      }
+
       return SuccessApiResult(forgetPasswordEntity);
     } on DioException catch (e) {
       return ErrorApiResult(e);
+    } catch (e) {
+      return ErrorApiResult(Exception("Unexpected error: ${e.toString()}"));
     }
+  }
 
-
-
-  }}
+}

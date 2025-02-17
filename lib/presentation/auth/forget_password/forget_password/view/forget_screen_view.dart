@@ -119,7 +119,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                             default:
                                 return CustomTextButton(
                                       onPressed: () {
-                                     ForgetPasswordViewModelCubit.get(context).ForgetPassword(email: emailContrller.toString());
+                                     ForgetPasswordViewModelCubit.get(context).ForgetPassword(email:emailContrller.text);
                                       },
                                       text: 'Continue',
                                 );
