@@ -1,6 +1,6 @@
 
 
-import 'package:online_exam/domain/entity/Auth/user_entity.dart';
+import 'package:online_exam/domain/entity/Auth/auth_response/user_entity.dart';
 
 /// message : "success"
 /// code : 200
