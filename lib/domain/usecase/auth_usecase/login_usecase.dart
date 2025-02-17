@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
 
-import '../../entity/Auth/auth_response.dart';
+import '../../entity/Auth/auth_response/auth_response.dart';
 import '../../repo_contract/auth_repo.dart';
 
 @injectable

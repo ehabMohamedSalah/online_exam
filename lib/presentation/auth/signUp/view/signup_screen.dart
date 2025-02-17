@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:online_exam/core/resuable-comp/custom_text_field.dart';
 import 'package:online_exam/core/resuable-comp/text_button.dart';
@@ -31,13 +32,7 @@ class Signupscreen extends StatelessWidget {
     return BlocProvider(
       create: (BuildContext context) => getIt<SignupViewModelCubit>(),
       child: Scaffold(
-        appBar: AppBar(
-          title: AppBarWidget(
-            onpressed: () {},
 
-            title:"signUp",
-          ),
-        ),
         body: Padding(
           padding: const EdgeInsets.all(25),
           child: Form(
@@ -45,6 +40,17 @@ class Signupscreen extends StatelessWidget {
             child: SingleChildScrollView(
               child: Column(
                 children: [
+
+                  AppBarWidget(
+                    onpressed: () {
+                      Navigator.pop(context);
+                    },
+
+                    title:"signUp",
+                  ),
+                  SizedBox(
+                    height: 50.h,
+                  ),
                   CustomTextField(
                     labelText: "User name",
                     hintText: "Enter your user name",
