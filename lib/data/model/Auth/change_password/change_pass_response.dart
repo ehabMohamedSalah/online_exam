@@ -1,27 +1,21 @@
-/// oldPassword : "Bl77@2222"
-/// password : "Elevate@123"
-/// rePassword : "Elevate@123"
+/// message : "success"
+/// token : "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YjI2N2VlODZhMDI0ZjA2ZWEyNzgwMSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzM5NzQ2MjY5fQ.QMVlqP8lXIUjfgDUq-6JdqM_Dj8cAV4tlskzE50Dl8U"
 
-class ChangePasswordResponse {
-  String? oldPassword;
-  String? password;
-  String? rePassword;
+class ChangePassResponse {
   String? message;
-  int? code;
   String? token;
 
-  ChangePasswordResponse({this.rePassword, this.password, this.oldPassword,this.code,this.message,this.token});
+  ChangePassResponse({this.token, this.message});
 
-  ChangePasswordResponse.fromJson(dynamic json) {
-    oldPassword = json['oldPassword'];
-    password = json['password'];
-    rePassword = json['rePassword'];
+  ChangePassResponse.fromJson(dynamic json) {
+    message = json['message'];
+    token = json['token'];
   }
+
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
-    map['oldPassword'] = oldPassword;
-    map['password'] = password;
-    map['rePassword'] = rePassword;
+    map['message'] = message;
+    map['token'] = token;
     return map;
   }
 }
