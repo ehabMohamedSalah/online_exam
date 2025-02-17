@@ -4,6 +4,7 @@ import 'package:online_exam/core/api/api_result.dart';
 import 'package:online_exam/data/datasource_contract/auth_datasource.dart';
 import 'package:online_exam/domain/entity/Auth/auth_response/auth_response.dart';
 import 'package:online_exam/domain/entity/Auth/foreget_pass_entity/ForgetPassEntity.dart';
+import 'package:online_exam/domain/entity/Auth/verify_response_entity/verify_response.dart';
 
 import '../../domain/repo_contract/auth_repo.dart';
  
@@ -47,6 +48,12 @@ class LoginRepoImpl extends AuthRepo{
   @override
   Future<ApiResult<ForgetPasswordEntity>> ForgetPassword({required String email}) async{
     var response=await apiDatasource.ForgetPassword(email: email);
+    return response;
+  }
+
+  @override
+  Future<ApiResult<VerifyResponseEntity>> Verification({required String resetCode}) async{
+    var response=await apiDatasource.Verification(resetCode: resetCode);
     return response;
   }
 

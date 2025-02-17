@@ -1,9 +1,16 @@
-/// resetCode : "429392"
+/// status : "Success"
+/// message : "Reset code is invalid or has expired"
+/// code : 400
 
 class VerifyResponseEntity {
-  String? resetCode;
+  VerifyResponseEntity({
+    this.status,
+    this.message,
+    this.code,});
+
+   String? status;
   String? message;
   int? code;
 
-  VerifyResponseEntity({this.resetCode, this.message, this.code});
+
 }

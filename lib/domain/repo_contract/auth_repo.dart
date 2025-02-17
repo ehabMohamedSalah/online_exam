@@ -5,6 +5,7 @@ import 'package:online_exam/domain/entity/Auth/auth_response/auth_response.dart'
 import '../../core/api/api_result.dart';
 import '../../data/model/Auth/forget_passowrd/ForgetPasswordResponse.dart';
 import '../entity/Auth/foreget_pass_entity/ForgetPassEntity.dart';
+import '../entity/Auth/verify_response_entity/verify_response.dart';
 
 abstract class AuthRepo{
   Future<Either<AuthResponseEntity,String>>Login({required String email,required String password});
@@ -18,5 +19,6 @@ abstract class AuthRepo{
     required String phone,
   });
   Future<ApiResult<ForgetPasswordEntity>> ForgetPassword({required String email });
+  Future<ApiResult<VerifyResponseEntity>> Verification({required String resetCode});
 
 }

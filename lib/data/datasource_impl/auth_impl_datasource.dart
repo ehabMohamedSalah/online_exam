@@ -8,7 +8,9 @@ import 'package:online_exam/core/api/endpoints.dart';
 import 'package:online_exam/data/datasource_contract/auth_datasource.dart';
 import 'package:online_exam/data/model/Auth/authResponse.dart';
 import 'package:online_exam/data/model/Auth/forget_passowrd/ForgetPasswordResponse.dart';
+import 'package:online_exam/data/model/Auth/verify_code/Verify_response.dart';
 import 'package:online_exam/domain/entity/Auth/foreget_pass_entity/ForgetPassEntity.dart';
+import 'package:online_exam/domain/entity/Auth/verify_response_entity/verify_response.dart';
 
 @Injectable(as:AuthDatasource )
 class AuthDatasourceImpl extends AuthDatasource {
@@ -81,6 +83,36 @@ class AuthDatasourceImpl extends AuthDatasource {
       }
 
       return SuccessApiResult(forgetPasswordEntity);
+    } on DioException catch (e) {
+      return ErrorApiResult(e);
+    } catch (e) {
+      return ErrorApiResult(Exception("Unexpected error: ${e.toString()}"));
+    }
+  }
+
+  @override
+  Future<ApiResult<VerifyResponseEntity>> Verification({required String resetCode})async {
+    try {
+      var response = await apiManager.postRequest(
+        endpoint: EndPoint.verifyEndpoint,
+        body: {"resetCode": resetCode},
+        headers: {
+          "token": "aaa", // Replace YOUR_TOKEN_HERE with the actual token
+         },
+      );
+
+       VerifyResponseModel verifyResponseModel = VerifyResponseModel.fromJson(
+          response.data);
+      VerifyResponseEntity verifyResponseEntity = verifyResponseModel
+          .toVerifyResponseEntity();
+
+      // Ensure proper error handling
+      if (verifyResponseEntity.code != null) {
+        return ErrorApiResult(Exception(
+            verifyResponseEntity.message ?? "Unknown error occurred"));
+      }
+
+      return SuccessApiResult(verifyResponseEntity);
     } on DioException catch (e) {
       return ErrorApiResult(e);
     } catch (e) {
