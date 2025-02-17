@@ -91,17 +91,18 @@ class AuthDatasourceImpl extends AuthDatasource {
   }
 
   @override
-  Future<ApiResult<VerifyResponseEntity>> Verification({required String resetCode})async {
+  Future<ApiResult<VerifyResponseEntity>> Verification(
+      {required String resetCode}) async {
     try {
       var response = await apiManager.postRequest(
         endpoint: EndPoint.verifyEndpoint,
         body: {"resetCode": resetCode},
         headers: {
           "token": "aaa", // Replace YOUR_TOKEN_HERE with the actual token
-         },
+        },
       );
 
-       VerifyResponseModel verifyResponseModel = VerifyResponseModel.fromJson(
+      VerifyResponseModel verifyResponseModel = VerifyResponseModel.fromJson(
           response.data);
       VerifyResponseEntity verifyResponseEntity = verifyResponseModel
           .toVerifyResponseEntity();
