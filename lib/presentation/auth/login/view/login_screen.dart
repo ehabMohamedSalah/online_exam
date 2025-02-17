@@ -34,8 +34,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider.value(
-      value: viewModel,
+    return BlocProvider(
+        create: (context) =>  getIt<LoginViewModelCubit>(),
        child: Scaffold(
         body: SingleChildScrollView(
           child: Padding(
@@ -114,68 +114,59 @@ class _LoginScreenState extends State<LoginScreen> {
                   SizedBox(
                     height: 50.h,
                   ),
-                   BlocConsumer<LoginViewModelCubit,LoginViewModelState>(
-                    listener: (context, state) {
-                          if(state is LoginSuccess){
-                            Fluttertoast.showToast(
-                                msg: "login is Success",
-                                toastLength: Toast.LENGTH_SHORT,
-                                gravity: ToastGravity.CENTER,
-                                timeInSecForIosWeb: 1,
-                                backgroundColor: Colors.green,
-                                textColor: Colors.white,
-                                fontSize: 16.0
+              BlocConsumer<LoginViewModelCubit, LoginViewModelState>(
+                listener: (context, state) {
+                  switch (state.runtimeType) {
+                    case LoginSuccess:
+                      Fluttertoast.showToast(
+                        msg: "✅ Login Success!",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.CENTER,
+                        backgroundColor: Colors.green,
+                        textColor: Colors.white,
+                      );
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, RouteManager.homeScreen, (route) => false);
+                      break;
+                    case LoginErorr:
+                      String errorMessage = "❌ Login failed!";
+
+                      if ((state as LoginErorr).exp.exception.toString().contains("Unauthorized")) {
+                        errorMessage = "🔴 Invalid credentials! Please try again.";
+                      }
+
+                      Fluttertoast.showToast(
+                        msg: errorMessage,
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.CENTER,
+                        backgroundColor: Colors.red,
+                        textColor: Colors.white,
+                      );
+                      break;
+                  }
+                },
+                builder: (context, state) {
+                  switch (state) {
+                    case Loginloading:
+                      return CircularProgressIndicator();
+                    default:
+                      return CustomTextButton(
+                        text: StringManager.login,
+                        onPressed: () {
+                          if (formKey.currentState?.validate() == true) {
+                            LoginViewModelCubit.get(context).login(
+                              email: emailContrller.text,
+                              password: passwordController.text,
                             );
-                            Navigator.pushNamedAndRemoveUntil(context,
-                                RouteManager.homeScreen, (route) => false);
+                          } else {
+                            print("❌ Please enter correct data");
                           }
-                          if (state is LoginErorr) {
-                            Fluttertoast.showToast(
-                                msg: state.exp.exception.toString(),
-                                toastLength: Toast.LENGTH_SHORT,
-                                gravity: ToastGravity.CENTER,
-                                timeInSecForIosWeb: 1,
-                                backgroundColor: Colors.red,
-                                textColor: Colors.white,
-                                fontSize: 16.0);
-                          }
-                    },
-                     builder: (context, state) {
-                       switch (state) {
-                          case Loginloading():
-                           return CircularProgressIndicator();
-                         case LoginErorr():
-                           return Text("Error, please try again!");
-                         default:
-                           return CustomTextButton(
-                             text: StringManager.login,
-                             onPressed: () {
+                        },
+                      );
+                  }
+                },
+              ),
 
-                                 if (formKey.currentState?.validate() == true) {
-                                   // ✅ استدعاء login
-
-                                    var response= LoginViewModelCubit.get(context).login(
-                                       email: emailContrller.text,
-                                       password: passwordController.text,
-                                     );
-                                    if(response==LoginSuccess){
-                                      Navigator.pushNamedAndRemoveUntil(context,
-                                          RouteManager.homeScreen, (route) => false);
-                                    }
-
-
-
-
-                               } else {
-                                 // ❌ لو البيانات غير صحيحة
-                                 print("Please enter correct data");
-                               }
-                             },
-                           );
-                       }
-                     },
-
-                  ),
 
 
                   SizedBox(

@@ -12,31 +12,34 @@ part 'login_view_model_state.dart';
 class LoginViewModelCubit extends Cubit<LoginViewModelState> {
   @factoryMethod
   LoginUseCase loginUseCase;
+
   LoginViewModelCubit(this.loginUseCase) : super(LoginViewModelInitial());
 
   //هو مساعد للوصول إلى الكيوبت (Cubit) بسهولة داخل الـ UI أو أي مكان آخر داخل التطبيق.
-  static LoginViewModelCubit get(context){
+  static LoginViewModelCubit get(context) {
     return BlocProvider.of(context);
   }
 
 
-  Future<void> login({required String email,required String password})async{
+  Future<void> login({required String email, required String password}) async {
+    emit(Loginloading()); // بدء حالة التحميل
+    print("🚀 Login Started...");
 
-   var response= await loginUseCase.call(email:email,password:password);
-    switch(response){
-      case SuccessApiResult<LoginResponse>():
-        emit(
-          LoginSuccess(
-            response,
-          ),
-        );
-      case ErrorApiResult<LoginResponse>():
-        emit(
-          LoginErorr(
-            ErrorApiResult(response.exception),
-          ),
-        );
+    var response = await loginUseCase.call(email: email, password: password);
+    print("📩 API Response Received: $response");
 
-
-}}}
-
+    if (response is SuccessApiResult<LoginResponse>) {
+      if (response.data?.code !=null) {
+        print("🔴 Unauthorized (401): Invalid credentials");
+        emit(LoginErorr(ErrorApiResult<LoginResponse>(
+            Exception("Unauthorized: Invalid credentials"))));
+      } else {
+        print("✅ Login Success!");
+        emit(LoginSuccess(response));
+      }
+    } else if (response is ErrorApiResult<LoginResponse>) {
+      print("❌ Login Error: ${response.exception}");
+      emit(LoginErorr(response)); // Passing the existing error response
+    }
+  }
+}
