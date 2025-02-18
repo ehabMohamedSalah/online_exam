@@ -4,7 +4,7 @@ import 'package:injectable/injectable.dart';
 import 'package:meta/meta.dart';
 import 'package:online_exam/domain/usecase/auth_usecase/signup_usecase.dart';
 
-import '../../../../domain/entity/Auth/auth_response.dart';
+import '../../../../domain/entity/Auth/auth_response/auth_response.dart';
 part 'signup_view_model_state.dart';
 
 @injectable

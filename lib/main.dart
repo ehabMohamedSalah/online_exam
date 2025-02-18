@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:online_exam/presentation/auth/login/view/login_screen.dart';
+ import 'package:online_exam/presentation/auth/forget_password/forget_password/view/forget_screen_view.dart';
+ import 'package:online_exam/presentation/auth/login/view/login_screen.dart';
 import 'package:online_exam/presentation/auth/signUp/view/signup_screen.dart';
 import 'package:online_exam/presentation/home/view/homeSceen.dart';
 
@@ -30,11 +31,13 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           routes:{
             RouteManager.homeScreen:(context) => HomeScreen(),
-              RouteManager.loginScreen:(context) => LoginScreen(),
+            RouteManager.loginScreen:(context) => LoginScreen(),
+             RouteManager.forgetPassScreen:(context) => ForgetPasswordScreen(),
+            RouteManager.loginScreen:(context) => LoginScreen(),
             RouteManager.signUpscreen:(context) => Signupscreen(),
 
           },
-          initialRoute:  RouteManager.signUpscreen ,
+          initialRoute:  RouteManager.loginScreen ,
           theme:AppTheme.lightTheme ,
 
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -47,8 +48,10 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Column(
                 children: [
                   SizedBox(height: 30.h,),
-                  AppBarWidget( onpressed: ( ) {}, title: '',),
-                  SizedBox(height: 20.h,),
+                   Align(
+                       alignment: Alignment.centerLeft,
+                       child: Text("Login",style: Theme.of(context).textTheme.labelLarge,)),
+                   SizedBox(height: 20.h,),
                   CustomTextField(
                     labelText: StringManager.email,
                     hintText: StringManager.enterYourEmail,
@@ -95,7 +98,11 @@ class _LoginScreenState extends State<LoginScreen> {
                           Text(StringManager.rememberMe,style: Theme.of(context).textTheme.bodyMedium,),
                         ],
                       ),
-                      Text(StringManager.forgetPass,style: Theme.of(context).textTheme.bodyMedium?.copyWith(decoration: TextDecoration.underline,decorationThickness: 2.0),)
+                      InkWell(
+                          onTap: (){
+                            Navigator.pushNamed(context, RouteManager.forgetPassScreen);
+                          },
+                          child: Text(StringManager.forgetPass,style: Theme.of(context).textTheme.bodyMedium?.copyWith(decoration: TextDecoration.underline,decorationThickness: 2.0),))
                     ],
                   ),
                   SizedBox(height: 50.h,),
@@ -152,7 +159,12 @@ class _LoginScreenState extends State<LoginScreen> {
                     children: [
                       Text(StringManager.dontHaveAnAcc,style: Theme.of(context).textTheme.bodyMedium,),
                       SizedBox(width: 5.w,),
-                      Text(StringManager.signUp,style: TextStyle(color: ColorManager.primaryColor,fontWeight: FontWeight.bold,decoration: TextDecoration.underline,decorationThickness: 2.0),),
+                      InkWell
+                        (
+                          onTap: (){
+                            Navigator.pushNamed(context, RouteManager.signUpscreen);
+                          },
+                          child: Text(StringManager.signUp,style: TextStyle(color: ColorManager.primaryColor,fontWeight: FontWeight.bold,decoration: TextDecoration.underline,decorationThickness: 2.0),)),
               
                     ],
                   )
