@@ -11,7 +11,8 @@ import 'package:online_exam/core/utils/colors_manager.dart';
 import 'package:online_exam/core/utils/routes_manager.dart';
 import 'package:online_exam/core/utils/string_manager.dart';
 import 'package:online_exam/presentation/auth/forget_password/forget_password/view_model/forget_password_view_model_cubit.dart';
-import 'package:online_exam/presentation/auth/login/view_model/login_view_model_cubit.dart';
+
+import '../../verify_otp_code/view/otp_screen_view.dart';
 
 class ForgetPasswordScreen extends StatefulWidget {
   const ForgetPasswordScreen({super.key});
@@ -97,8 +98,14 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                         backgroundColor: Colors.green,
                         textColor: Colors.white,
                       );
-                      Navigator.pushNamedAndRemoveUntil(
-                          context, RouteManager.otpScreen, (route) => false);
+
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => OtpScreen( emailContrller.text),
+                        ),
+                      );
+
                       break;
                     case ForgetPasswordErorr:
                       String errorMessage =(state as ForgetPasswordErorr).exp.exception.toString();

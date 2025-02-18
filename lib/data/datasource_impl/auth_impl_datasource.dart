@@ -8,8 +8,10 @@ import 'package:online_exam/core/api/endpoints.dart';
 import 'package:online_exam/data/datasource_contract/auth_datasource.dart';
 import 'package:online_exam/data/model/Auth/authResponse.dart';
 import 'package:online_exam/data/model/Auth/forget_passowrd/ForgetPasswordResponse.dart';
+import 'package:online_exam/data/model/Auth/rese_pass/ResetPasswordResponseModel.dart';
 import 'package:online_exam/data/model/Auth/verify_code/Verify_response.dart';
 import 'package:online_exam/domain/entity/Auth/foreget_pass_entity/ForgetPassEntity.dart';
+import 'package:online_exam/domain/entity/Auth/reset_pass_response_entity/reset_passowrd_response_entity.dart';
 import 'package:online_exam/domain/entity/Auth/verify_response_entity/verify_response.dart';
 
 @Injectable(as:AuthDatasource )
@@ -120,5 +122,42 @@ class AuthDatasourceImpl extends AuthDatasource {
       return ErrorApiResult(Exception("Unexpected error: ${e.toString()}"));
     }
   }
+
+  @override
+  Future<ApiResult<ResetPasswordResponseEntity>> ResetPassword({required String email, required String NewPassword}) async {
+    try {
+      var response = await apiManager.put(
+        Endpoint: EndPoint.resetPasswordEndpoint, // ✅ Use the PUT request
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: { // ✅ Pass the request body here
+          "email": email,
+          "newPassword": NewPassword
+        },
+      );
+
+      ResetPasswordResponseModel resetPasswordResponseModel = ResetPasswordResponseModel
+          .fromJson(
+          response.data);
+      ResetPasswordResponseEntity resetPasswordResponseEntity = resetPasswordResponseModel
+          .toResetPasswordResponseEntity();
+
+      // Ensure proper error handling
+      if (resetPasswordResponseEntity.code != null) {
+        return ErrorApiResult(Exception(
+            resetPasswordResponseEntity.message ?? "Unknown error occurred"));
+      }
+
+      return SuccessApiResult(resetPasswordResponseEntity);
+    } on DioException catch (e) {
+      return ErrorApiResult(e);
+    } catch (e) {
+      return ErrorApiResult(Exception("Unexpected error: ${e.toString()}"));
+    }
+  }
+
+
+
 
 }
