@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
             RouteManager.signUpscreen:(context) => Signupscreen(),
 
           },
-          initialRoute:  RouteManager.loginScreen ,
+          initialRoute:  RouteManager.homeScreen ,
           theme:AppTheme.lightTheme ,
 
 

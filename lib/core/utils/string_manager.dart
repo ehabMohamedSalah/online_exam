@@ -21,4 +21,10 @@ class StringManager {
   static const String newPassword = "New password";
   static const String enterYourNewPassword = "Enter you password";
   static const String confirmPassword = "Confirm password";
+
+  static const String explore = "Explore";
+  static const String result = "Result";
+  static const String profile = "Profile";
+
+
 }

@@ -17,10 +17,14 @@ class AppTheme{
       ),
 
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
-
         backgroundColor: ColorManager.backgroundBottomNavBar,
+        selectedItemColor: ColorManager.primaryColor,
         unselectedItemColor: ColorManager.greyColor,
+        showSelectedLabels: true, // Show text label when selected
+        showUnselectedLabels: true, // Show text label when unselected
+        type: BottomNavigationBarType.fixed, // Ensures all items stay visible
       ),
+
 
       textTheme: TextTheme(
 
