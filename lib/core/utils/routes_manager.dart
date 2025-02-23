@@ -6,5 +6,6 @@ class RouteManager {
   static const String forgetPassScreen = "/FORGETPASSSCREEN";
   static const String emailScreen = "/EMAILSCREEN";
   static const String changePassScreen = "/CHANGEPASSWORD";
+  static const String profileTabScreen = "/PROFILETABSCREEN";
 
 }

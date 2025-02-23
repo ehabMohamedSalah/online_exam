@@ -9,7 +9,6 @@ import 'package:online_exam/core/utils/colors_manager.dart';
 import 'package:online_exam/core/utils/routes_manager.dart';
 import 'package:online_exam/core/utils/string_manager.dart';
  import 'package:online_exam/presentation/auth/forget_password/verify_otp_code/view/view_model/verification_view_model_cubit.dart';
-import 'package:online_exam/presentation/auth/login/view_model/login_view_model_cubit.dart';
 
 import '../../reset_password/view/reset_password_screen_view.dart';
 
@@ -78,7 +77,7 @@ class _OtpScreenState extends State<OtpScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => ChangePasswordScreen( widget.email),
+                            builder: (context) => RestPasswordScreen( widget.email),
                           ),
                         );
                         break;
