@@ -40,7 +40,7 @@ class _ExploreTabScreenState extends State<ExploreTabScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              SizedBox(height: 70.sp),
+              SizedBox(height: 30.sp),
               Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
@@ -93,8 +93,8 @@ class _ExploreTabScreenState extends State<ExploreTabScreen> {
                               child: ListTile(
                                 leading: Image.network(
                                   item?.icon ?? "",
-                                  width: 30,
-                                  height: 30,
+                                  width: 40,
+                                  height: 40,
                                   errorBuilder: (context, error, stackTrace) =>
                                       Icon(Icons.broken_image,
                                           color: Colors.grey),
