@@ -14,14 +14,14 @@ import 'package:online_exam/presentation/auth/login/view_model/login_view_model_
 
 import '../view_model/reset_password_view_model_cubit.dart';
 
-class ChangePasswordScreen extends StatefulWidget {
+class RestPasswordScreen extends StatefulWidget {
   String email;
-  ChangePasswordScreen(this.email);
+  RestPasswordScreen(this.email);
    @override
-  State<ChangePasswordScreen> createState() => _ChangePasswordScreenState();
+  State<RestPasswordScreen> createState() => _RestPasswordScreenState();
 }
 
-class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
+class _RestPasswordScreenState extends State<RestPasswordScreen> {
   late TextEditingController newPasswordContrller;
   late TextEditingController confirmPasswordController;
   GlobalKey<FormState> formKey = GlobalKey<FormState>();

@@ -16,11 +16,13 @@ class StringManager {
   static const String forgetPass = "Forget password?";
   static const String dontHaveAnAcc = "Don't have an account?";
   static const String signUp = "SignUp";
+  static const String update = "Update";
 
   static const String resetPassword = "Reset password";
   static const String newPassword = "New password";
   static const String enterYourNewPassword = "Enter you password";
   static const String confirmPassword = "Confirm password";
+  static const String currentPassword = "Current password";
 
   static const String explore = "Explore";
   static const String result = "Result";
