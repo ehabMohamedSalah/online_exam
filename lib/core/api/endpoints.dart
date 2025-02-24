@@ -5,6 +5,6 @@ class EndPoint{
   static const String verifyEndpoint = "api/v1/auth/verifyResetCode";
   static const String resetPasswordEndpoint = "api/v1/auth/resetPassword";
    static const String ForgetPasswordEndpoints="api/v1/auth/forgotPassword";
-
+  static const String getAllExams="https://exam.elevateegy.com/api/v1/subjects";
 }
 

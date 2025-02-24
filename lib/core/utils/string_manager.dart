@@ -1,4 +1,5 @@
 class StringManager {
+  static const String token="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YjI0Y2Q1ODZhMDI0ZjA2ZWEyNzc3YyIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzQwMzk5MDM3fQ.HQj0mnNvDqagVIawpNudo2pnLxOm6I4gvPZrMlKp2p0";
   static const String login = "Login";
   static const String email = "Email";
   static const String enterYourEmail = "Enter you email";
@@ -27,6 +28,12 @@ class StringManager {
   static const String explore = "Explore";
   static const String result = "Result";
   static const String profile = "Profile";
+  static const String survey = "Survey";
+  static const String browseBySubject = "Browse by subject";
+  static const String language = "Language";
+  static const String math = "Math";
+  static const String art = "Art";
+  static const String science = "Science";
 
 
 }

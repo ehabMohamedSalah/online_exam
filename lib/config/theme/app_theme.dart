@@ -34,12 +34,22 @@ class AppTheme{
           fontSize: 22.sp,
           color: ColorManager.labelLarge,
         ),
+       bodyLarge: TextStyle(
+         fontWeight:FontWeight.w500,
+         fontSize: 20.sp,
+         color: ColorManager.primaryColor,
+       ) ,
 
         //hint style
         labelMedium:  TextStyle(
           fontWeight:FontWeight.w400,
           fontSize: 16.sp,
           color: ColorManager.hintColor,
+        ),
+        displayLarge:  TextStyle(
+          fontWeight:FontWeight.w500,
+          fontSize: 18.sp,
+          color: Colors.black,
         ),
 
         //label style
