@@ -1,3 +1,5 @@
+import 'package:online_exam/data/datasource_contract/exams_onsubject_datasource.dart';
+
 class EndPoint{
 
   static const String signInEndpoint="api/v1/auth/signin";
@@ -6,5 +8,9 @@ class EndPoint{
   static const String resetPasswordEndpoint = "api/v1/auth/resetPassword";
    static const String ForgetPasswordEndpoints="api/v1/auth/forgotPassword";
   static const String getAllExams="https://exam.elevateegy.com/api/v1/subjects";
+  static String ExamsOnSubjectEndpoint(String subjectID) {
+    return "https://exam.elevateegy.com/api/v1/exams?subject=$subjectID";
+  }
+
 }
 

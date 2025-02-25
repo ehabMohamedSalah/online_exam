@@ -7,6 +7,7 @@ import 'package:online_exam/core/utils/string_manager.dart';
 import 'package:online_exam/presentation/home/tabs/explore_tab/view/widgets/search_text_form_field.dart';
 
 import '../../../../../core/di/di.dart';
+import '../subject_on_exams/view/subject_on_exam_Screen.dart';
 import '../view_model/explore_view_model_cubit.dart';
 
 class ExploreTabScreen extends StatefulWidget {
@@ -85,24 +86,38 @@ class _ExploreTabScreenState extends State<ExploreTabScreen> {
                           itemBuilder: (context, index) {
                             final item =
                                 successState.response.data?.subjects?[index];
-                            return Card(
-                              elevation: 2, // Shadow depth
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: ListTile(
-                                leading: Image.network(
-                                  item?.icon ?? "",
-                                  width: 40,
-                                  height: 40,
-                                  errorBuilder: (context, error, stackTrace) =>
-                                      Icon(Icons.broken_image,
-                                          color: Colors.grey),
+                            return SizedBox(
+                              height: 100.h,
+                              child: Card(
+
+                                elevation: 2, // Shadow depth
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
                                 ),
-                                title: Text(item?.name ?? ""),
-                                onTap: () {
-                                  print("${item?.name} clicked");
-                                },
+                                child: ListTile(
+
+                                  leading: Image.network(
+                                    item?.icon ?? "",
+                                    width: 99,
+                                    height: 120,
+                                    fit: BoxFit.fitWidth,
+                                    errorBuilder: (context, error, stackTrace) =>
+                                        Icon(Icons.broken_image,
+                                            color: Colors.grey),
+                                  ),
+                                  title: Text(item?.name ?? ""),
+
+                                      onTap: () {
+                                      if (item?.id != null) {
+                                      Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                      builder: (context) => SubjectOnExamsScreen(item?.id??""),
+                                      ),
+                                      );
+                                      }
+                                  },
+                                ),
                               ),
                             );
                           },
