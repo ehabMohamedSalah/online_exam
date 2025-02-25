@@ -2,10 +2,10 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:meta/meta.dart';
-import 'package:online_exam/domain/entity/Auth/foreget_pass_entity/ForgetPassEntity.dart';
+import 'package:online_exam/domain/entity/Auth/foreget_pass_entity/forget_pass_entity.dart';
 
 import '../../../../../core/api/api_result.dart';
-import '../../../../../data/model/Auth/forget_passowrd/ForgetPasswordResponse.dart';
+import '../../../../../data/model/Auth/forget_passowrd/forget_password_response.dart';
 import '../../../../../domain/usecase/auth_usecase/forget_password_usecase.dart';
 
 part 'forget_password_view_model_state.dart';
