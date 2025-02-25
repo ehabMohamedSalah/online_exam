@@ -1,4 +1,4 @@
-import 'package:online_exam/domain/entity/Auth/foreget_pass_entity/ForgetPassEntity.dart';
+import 'package:online_exam/domain/entity/Auth/foreget_pass_entity/forget_pass_entity.dart';
 
 /// message : "success"
 /// info : "OTP sent to your email"

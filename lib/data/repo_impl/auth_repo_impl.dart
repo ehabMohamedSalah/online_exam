@@ -3,7 +3,7 @@ import 'package:injectable/injectable.dart';
 import 'package:online_exam/core/api/api_result.dart';
 import 'package:online_exam/data/datasource_contract/auth_datasource.dart';
 import 'package:online_exam/domain/entity/Auth/auth_response/auth_response.dart';
-import 'package:online_exam/domain/entity/Auth/foreget_pass_entity/ForgetPassEntity.dart';
+import 'package:online_exam/domain/entity/Auth/foreget_pass_entity/forget_pass_entity.dart';
 import 'package:online_exam/domain/entity/Auth/reset_pass_response_entity/reset_passowrd_response_entity.dart';
 import 'package:online_exam/domain/entity/Auth/verify_response_entity/verify_response.dart';
 
