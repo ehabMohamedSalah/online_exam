@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:online_exam/core/di/di.dart';
 import 'package:online_exam/core/resuable-comp/app_bar.dart';
 import 'package:online_exam/core/resuable-comp/custom_text_field.dart';
@@ -11,8 +12,7 @@ import 'package:online_exam/core/utils/routes_manager.dart';
 import 'package:online_exam/core/utils/string_manager.dart';
 import 'package:online_exam/presentation/auth/signUp/view_Model/signup_view_model_cubit.dart';
 import 'dart:io';
-import 'package:image_picker/image_picker.dart';
-import 'package:online_exam/presentation/home/tabs/profile_tab/change_password/view/new_password.dart';
+ import 'package:online_exam/presentation/home/tabs/profile_tab/change_password/view/new_password.dart';
 import 'package:online_exam/presentation/home/tabs/profile_tab/edit_profile_screen/view/edit_profile_tab_screen.dart';
 
 class ProfileTabScreen extends StatefulWidget {

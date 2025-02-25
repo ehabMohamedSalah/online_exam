@@ -4,7 +4,7 @@ import 'package:online_exam/core/utils/colors_manager.dart';
 
 import '../../../core/utils/assets_manager.dart';
 import '../../../core/utils/string_manager.dart';
-import '../tabs/explore_tab/explore_tab_screen.dart';
+import '../tabs/explore_tab/view/explore_tab_screen.dart';
 import '../tabs/profile_tab/profile_screen/view/profile_tab_screen.dart';
 import '../tabs/result_tab/result_tab_screen.dart';
 
