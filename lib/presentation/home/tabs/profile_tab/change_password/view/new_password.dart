@@ -6,14 +6,15 @@ import 'package:online_exam/core/constant.dart';
 import 'package:online_exam/core/di/di.dart';
 import 'package:online_exam/core/resuable-comp/app_bar.dart';
 import 'package:online_exam/core/resuable-comp/custom_text_field.dart';
+import 'package:online_exam/core/resuable-comp/text_button.dart';
+import 'package:online_exam/core/utils/routes_manager.dart';
 import 'package:online_exam/core/utils/string_manager.dart';
-import 'package:online_exam/presentation/auth/forget_password/reset_password/view_model/reset_password_view_model_cubit.dart';
-import 'package:online_exam/presentation/home/tabs/profile_tab/profile_screen/view/profile_tab_screen.dart';
+import 'package:online_exam/presentation/home/tabs/profile_tab/change_password/view_model/new_password_view_model_cubit.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
-  String email;
+  String oldPassword;
 
-  ChangePasswordScreen(this.email);
+  ChangePasswordScreen(this.oldPassword);
 
   @override
   State<ChangePasswordScreen> createState() => _ChangePasswordScreenState();
@@ -38,7 +39,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlocProvider(
-        create: (BuildContext context) => getIt<ResetPasswordViewModelCubit>(),
+        create: (BuildContext context) => getIt<NewPasswordViewModelCubit>(),
         child: Padding(
           padding: const EdgeInsets.all(20),
           child: Form(
@@ -48,11 +49,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               children: [
                 AppBarWidget(
                   onpressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ProfileTabScreen()),
-                    );
+                    Navigator.pushNamed(context, RouteManager.homeScreen);
                   },
                   title: StringManager.resetPassword,
                 ),
@@ -67,7 +64,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   keyboard: TextInputType.visiblePassword,
                   validator: (value) {
                     if (!Constant.regexPass.hasMatch(value ?? "")) {
-                      return StringManager.notValidEmail;
+                      return StringManager.invalidPassword;
                     }
                   },
                 ),
@@ -82,7 +79,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   keyboard: TextInputType.visiblePassword,
                   validator: (value) {
                     if (!Constant.regexPass.hasMatch(value ?? "")) {
-                      return StringManager.notValidEmail;
+                      return StringManager.invalidPassword;
                     }
                   },
                 ),
@@ -97,10 +94,10 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   keyboard: TextInputType.visiblePassword,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return "Confirm Password cannot be empty";
+                      return StringManager.confirmPasswordCannotBeEmpty;
                     }
                     if (value != newPasswordContrller.text) {
-                      return "Passwords do not match";
+                      return StringManager.passwordNotMatched;
                     }
                     return null;
                   },
@@ -108,47 +105,50 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 SizedBox(
                   height: 48.h,
                 ),
-                // BlocConsumer<NewPasswordViewModelCubit,NewPasswordViewModelState>(
-                //     listener: (context, state) {
-                //       switch (state.runtimeType) {
-                //         case ResetPasswordSuccess:
-                //           Fluttertoast.showToast(
-                //             msg: "✅ Password Changes!",
-                //             toastLength: Toast.LENGTH_SHORT,
-                //             gravity: ToastGravity.CENTER,
-                //             backgroundColor: Colors.green,
-                //             textColor: Colors.white,
-                //           );
-                //
-                //           Navigator.pushNamed(context, RouteManager.loginScreen);
-                //
-                //           break;
-                //         case ResetPasswordErorr:
-                //           String errorMessage =(state as ResetPasswordErorr).exp.exception.toString();
-                //           Fluttertoast.showToast(
-                //             msg: errorMessage,
-                //             toastLength: Toast.LENGTH_SHORT,
-                //             gravity: ToastGravity.CENTER,
-                //             backgroundColor: Colors.red,
-                //             textColor: Colors.white,
-                //           );
-                //           break;
-                //       }
-                //     },
-                //     builder: (context, state) {
-                //       switch (state) {
-                //         case ResetPasswordloading:
-                //           return CircularProgressIndicator();
-                //         default:
-                //           return   CustomTextButton(
-                //             onPressed: () {
-                //               print(widget.email);
-                //               ResetPasswordViewModelCubit.get(context).ResetPassword(email: widget.email, NewPassword: confirmPasswordController.text);
-                //             },
-                //             text: 'Update',
-                //           );
-                //
-                //       }}),
+                BlocConsumer<NewPasswordViewModelCubit,
+                    NewPasswordViewModelState>(listener: (context, state) {
+                  switch (state.runtimeType) {
+                    case NewPasswordSuccess:
+                      Fluttertoast.showToast(
+                        msg: "✅ Password Changes!",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.CENTER,
+                        backgroundColor: Colors.green,
+                        textColor: Colors.white,
+                      );
+                      Navigator.pushNamed(context, RouteManager.homeScreen);
+                      break;
+                    case NewPasswordErorr:
+                      String errorMessage =
+                          (state as NewPasswordErorr).exp.exception.toString();
+                      Fluttertoast.showToast(
+                        msg: errorMessage,
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.CENTER,
+                        backgroundColor: Colors.red,
+                        textColor: Colors.white,
+                      );
+                      break;
+                  }
+                }, builder: (context, state) {
+                  switch (state) {
+                    case NewPasswordloading:
+                      return const CircularProgressIndicator();
+                    default:
+                      return CustomTextButton(
+                        onPressed: () {
+                          if (formKey.currentState!.validate()) {
+                            NewPasswordViewModelCubit.get(context)
+                                .ChangePassword(
+                              token: oldPasswordController.text,
+                              message: confirmPasswordController.text,
+                            );
+                          }
+                        },
+                        text: 'Update',
+                      );
+                  }
+                }),
               ],
             ),
           ),
