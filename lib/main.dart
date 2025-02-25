@@ -33,8 +33,7 @@ class MyApp extends StatelessWidget {
             RouteManager.homeScreen:(context) => HomeScreen(),
             RouteManager.loginScreen:(context) => LoginScreen(),
              RouteManager.forgetPassScreen:(context) => ForgetPasswordScreen(),
-            RouteManager.loginScreen:(context) => LoginScreen(),
-            RouteManager.signUpscreen:(context) => Signupscreen(),
+             RouteManager.signUpscreen:(context) => Signupscreen(),
 
           },
           initialRoute:  RouteManager.homeScreen ,
