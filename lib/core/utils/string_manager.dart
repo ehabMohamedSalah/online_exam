@@ -25,6 +25,10 @@ class StringManager {
   static const String confirmPassword = "Confirm password";
   static const String currentPassword = "Current password";
 
+  static const String invalidPassword = "Invalid password";
+  static const String passwordNotMatched = "Password not matched";
+  static const String confirmPasswordCannotBeEmpty = "Confirm Password cannot be empty";
+
   static const String explore = "Explore";
   static const String result = "Result";
   static const String profile = "Profile";
