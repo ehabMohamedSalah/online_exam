@@ -144,6 +144,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                               message: confirmPasswordController.text,
                             );
                           }
+                          Navigator.pop(context, true);
                         },
                         text: 'Update',
                       );
