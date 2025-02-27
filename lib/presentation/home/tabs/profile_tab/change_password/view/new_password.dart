@@ -49,7 +49,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               children: [
                 AppBarWidget(
                   onpressed: () {
-                    Navigator.pushNamed(context, RouteManager.homeScreen);
+                    Navigator.pop(context,true);
                   },
                   title: StringManager.resetPassword,
                 ),
