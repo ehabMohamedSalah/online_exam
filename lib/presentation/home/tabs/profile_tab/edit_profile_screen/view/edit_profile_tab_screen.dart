@@ -2,35 +2,43 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:online_exam/core/api/api_result.dart';
 import 'package:online_exam/core/di/di.dart';
 import 'package:online_exam/core/resuable-comp/app_bar.dart';
 import 'package:online_exam/core/resuable-comp/custom_text_field.dart';
 import 'package:online_exam/core/resuable-comp/text_button.dart';
 import 'package:online_exam/core/utils/colors_manager.dart';
-import 'package:online_exam/core/utils/routes_manager.dart';
-import 'package:online_exam/core/utils/string_manager.dart';
-import 'package:online_exam/presentation/auth/signUp/view_Model/signup_view_model_cubit.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
+import 'package:online_exam/data/model/profile_tab/image_provider_model.dart';
+import 'package:online_exam/data/model/profile_tab/user_profile.dart';
+import 'package:online_exam/domain/entity/profile_tab/profile_entry/profile_response_entity.dart';
 import 'package:online_exam/presentation/home/tabs/profile_tab/change_password/view/new_password.dart';
-import 'package:online_exam/presentation/home/tabs/profile_tab/profile_screen/view/profile_tab_screen.dart';
+import 'package:online_exam/presentation/home/tabs/profile_tab/edit_profile_screen/view_model/edit_profile_view_model_cubit.dart';
+import 'package:online_exam/presentation/home/tabs/profile_tab/profile_screen/view_model/profile_screen_view_model_cubit.dart';
+import 'package:provider/provider.dart';
 
 class EditProfileTabScreen extends StatefulWidget {
+  final String userId;
+
+  const EditProfileTabScreen({required this.userId, super.key});
+
   @override
   State<EditProfileTabScreen> createState() => _EditProfileTabScreenState();
 }
 
 class _EditProfileTabScreenState extends State<EditProfileTabScreen> {
-  TextEditingController usernameController = TextEditingController();
-  TextEditingController firstNameController = TextEditingController();
-  TextEditingController lastNameController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-  TextEditingController rePasswordController = TextEditingController();
-  TextEditingController phoneController = TextEditingController();
+  late TextEditingController usernameController;
+  late TextEditingController firstNameController;
+  late TextEditingController lastNameController;
+  late TextEditingController emailController;
+  late TextEditingController passwordController;
+  late TextEditingController phoneController;
   TextInputType textInputType = TextInputType.text;
   TextInputType emailInputType = TextInputType.emailAddress;
   TextInputType phoneInputType = TextInputType.phone;
+
+  late UserProfile userProfile;
 
   String? password;
 
@@ -40,72 +48,104 @@ class _EditProfileTabScreenState extends State<EditProfileTabScreen> {
 
   final ImagePicker _picker = ImagePicker();
 
-  Future<void> _pickImage(ImageSource source) async {
-    final pickedFile = await _picker.pickImage(source: source);
-    if (pickedFile != null) {
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    usernameController = TextEditingController();
+    firstNameController = TextEditingController();
+    lastNameController = TextEditingController();
+    emailController = TextEditingController();
+    phoneController = TextEditingController();
+    passwordController = TextEditingController();
+    _fetchProfileData();
+  }
+
+  @override
+  void dispose() {
+    usernameController.dispose();
+    firstNameController.dispose();
+    lastNameController.dispose();
+    emailController.dispose();
+    phoneController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
+  void _fetchProfileData() async {
+    var response = await getIt<ProfileScreenViewModelCubit>()
+        .getProfileInfoUsecase
+        .call(id: widget.userId);
+
+    if (response is SuccessApiResult<ProfileResponseEntity> &&
+        response.data?.user != null) {
       setState(() {
-        _selectedImage = File(pickedFile.path);
+        userProfile = UserProfile.fromEntity(response.data!.user!);
+        usernameController.text = userProfile.username ?? "";
+        firstNameController.text = userProfile.firstName ?? "";
+        lastNameController.text = userProfile.lastName ?? "";
+        emailController.text = userProfile.email ?? "";
+        phoneController.text = userProfile.phone ?? "";
+        passwordController.text = "********";
+        isLoading = false;
       });
+    } else {
+      setState(() {
+        isLoading = false;
+      });
+      Fluttertoast.showToast(
+        msg: "Error fetching profile data",
+        backgroundColor: Colors.red,
+      );
     }
   }
 
-  void _showImagePicker() {
+    void _showImagePicker(BuildContext context) {
     showModalBottomSheet(
       context: context,
-      isScrollControlled: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      builder: (context) => Container(
-        padding: const EdgeInsets.all(20),
-        height: MediaQuery.of(context).size.height * 0.25,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Text(
-              "Choose an option",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 20),
-            ListTile(
-              leading: const Icon(Icons.camera, size: 30),
-              title: const Text("Take a photo", style: TextStyle(fontSize: 16)),
-              onTap: () {
-                Navigator.pop(context);
-                _pickImage(ImageSource.camera);
-              },
-            ),
-            const Divider(),
-            ListTile(
-              leading: const Icon(Icons.photo_library, size: 30),
-              title: const Text("Choose from gallery",
-                  style: TextStyle(fontSize: 16)),
-              onTap: () {
-                Navigator.pop(context);
-                _pickImage(ImageSource.gallery);
-              },
-            ),
-          ],
+      builder: (context) => Consumer<ImageProviderModel>(
+        builder: (context, imageProvider, child) => Container(
+          padding: const EdgeInsets.all(20),
+          height: MediaQuery.of(context).size.height * 0.25,
+          child: Column(
+            children: [
+              const Text(
+                "Choose an option",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 20),
+              ListTile(
+                leading: const Icon(Icons.camera, size: 30),
+                title: const Text("Take a photo", style: TextStyle(fontSize: 16)),
+                onTap: () {
+                  Navigator.pop(context);
+                  imageProvider.pickImage(ImageSource.camera);
+                },
+              ),
+              const Divider(),
+              ListTile(
+                leading: const Icon(Icons.photo_library, size: 30),
+                title: const Text("Choose from gallery", style: TextStyle(fontSize: 16)),
+                onTap: () {
+                  Navigator.pop(context);
+                  imageProvider.pickImage(ImageSource.gallery);
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
   @override
-  void initState() {
-    super.initState();
-    usernameController.text = "اسم المستخدم الافتراضي";
-    firstNameController.text = "الاسم الأول";
-    lastNameController.text = "الاسم الأخير";
-    passwordController.text = "111111";
-    emailController.text = "example@email.com";
-    phoneController.text = "0123456789";
-  }
-
-  @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (BuildContext context) => getIt<SignupViewModelCubit>(),
+      create: (BuildContext context) => getIt<EditProfileViewModelCubit>(),
       child: Scaffold(
         body: Padding(
           padding: const EdgeInsets.all(25),
@@ -116,50 +156,44 @@ class _EditProfileTabScreenState extends State<EditProfileTabScreen> {
                 children: [
                   AppBarWidget(
                     onpressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ProfileTabScreen()),
-                      );
+                     Navigator.pop(context,true);
                     },
                     title: 'Edit profile',
                   ),
-                  Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      CircleAvatar(
-                        radius: 50,
-                        backgroundColor: Colors.grey.shade300,
-                        backgroundImage: _selectedImage != null
-                            ? FileImage(_selectedImage!)
-                            : null,
-                        child: _selectedImage == null
-                            ? const Icon(Icons.person,
-                                size: 50, color: ColorManager.labelLarge)
-                            : null,
-                      ),
-                      Positioned(
-                        bottom: 0,
-                        right: 0,
-                        child: GestureDetector(
-                          onTap: _showImagePicker,
-                          child: const CircleAvatar(
-                            radius: 20,
-                            backgroundColor: ColorManager.primaryColor,
-                            child: Icon(Icons.camera_alt,
-                                size: 22,
-                                color: ColorManager.backgroundBottomNavBar),
+                  Consumer<ImageProviderModel>(
+                    builder: (context, imageProvider, child) => Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        CircleAvatar(
+                          radius: 50,
+                          backgroundColor: Colors.grey.shade300,
+                          backgroundImage: imageProvider.selectedImage != null
+                              ? FileImage(imageProvider.selectedImage!)
+                              : null,
+                          child: imageProvider.selectedImage == null
+                              ? const Icon(Icons.person, size: 50, color: ColorManager.labelLarge)
+                              : null,
+                        ),
+                        Positioned(
+                          bottom: 0,
+                          right: 0,
+                          child: GestureDetector(
+                            onTap: () => _showImagePicker(context),
+                            child: const CircleAvatar(
+                              radius: 20,
+                              backgroundColor: ColorManager.primaryColor,
+                              child: Icon(Icons.camera_alt, size: 22, color: ColorManager.backgroundBottomNavBar),
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                   SizedBox(
                     height: 50.h,
                   ),
                   CustomTextField(
                     labelText: "User name",
-                    hintText: "Enter your user name",
                     controller: usernameController,
                     keyboard: textInputType,
                     validator: (data) {
@@ -177,7 +211,6 @@ class _EditProfileTabScreenState extends State<EditProfileTabScreen> {
                       Expanded(
                         child: CustomTextField(
                           labelText: "First name",
-                          hintText: "Enter first name",
                           controller: firstNameController,
                           keyboard: textInputType,
                           validator: (data) {
@@ -193,7 +226,6 @@ class _EditProfileTabScreenState extends State<EditProfileTabScreen> {
                       Expanded(
                         child: CustomTextField(
                           labelText: "Last name",
-                          hintText: "Enter last name",
                           controller: lastNameController,
                           keyboard: textInputType,
                           validator: (data) {
@@ -210,7 +242,6 @@ class _EditProfileTabScreenState extends State<EditProfileTabScreen> {
                   const SizedBox(height: 30),
                   CustomTextField(
                     labelText: "Email",
-                    hintText: "Enter your email",
                     controller: emailController,
                     keyboard: emailInputType,
                     validator: (data) {
@@ -227,13 +258,9 @@ class _EditProfileTabScreenState extends State<EditProfileTabScreen> {
                     children: [
                       CustomTextField(
                         labelText: "Password",
-                        hintText: "Enter password",
                         controller: passwordController,
-                        keyboard: TextInputType.text,
-                        validator: (data) =>
-                            data!.isEmpty ? 'This password is not valid' : null,
-                        obscureText: true,
                         obscuringCharacter: "*",
+                        obscureText: true,
                       ),
                       Positioned(
                         right: 10,
@@ -261,7 +288,6 @@ class _EditProfileTabScreenState extends State<EditProfileTabScreen> {
                   const SizedBox(height: 30),
                   CustomTextField(
                     labelText: "Phone number",
-                    hintText: "Enter phone number",
                     controller: phoneController,
                     keyboard: phoneInputType,
                     validator: (data) {
@@ -273,49 +299,41 @@ class _EditProfileTabScreenState extends State<EditProfileTabScreen> {
                     obscureText: false,
                   ),
                   const SizedBox(height: 10),
-                  BlocConsumer<SignupViewModelCubit, SignupViewModelState>(
+                  BlocConsumer<EditProfileViewModelCubit,
+                      EditProfileViewModelState>(
                     listener: (context, state) {
-                      if (state is SignupSuccess) {
+                      if (state is EditProfileSuccess) {
                         Fluttertoast.showToast(
-                          msg: "Signup is Success",
-                          toastLength: Toast.LENGTH_SHORT,
-                          gravity: ToastGravity.CENTER,
-                          timeInSecForIosWeb: 1,
-                          backgroundColor: Colors.green,
-                          textColor: Colors.white,
-                          fontSize: 16.0,
-                        );
-                        Navigator.pushNamedAndRemoveUntil(
-                            context, RouteManager.homeScreen, (route) => false);
-                      }
-                      if (state is SignupErorr) {
+                            msg: "✅ Profile updated",
+                            backgroundColor: Colors.green);
+                        Navigator.pop(context, true);
+                      } else if (state is EditProfileErorr) {
                         Fluttertoast.showToast(
-                          msg: state.ErrorMessage,
-                          toastLength: Toast.LENGTH_SHORT,
-                          gravity: ToastGravity.CENTER,
-                          timeInSecForIosWeb: 1,
-                          backgroundColor: Colors.red,
-                          textColor: Colors.white,
-                          fontSize: 16.0,
-                        );
+                            msg: state.message, backgroundColor: Colors.red);
                       }
                     },
                     builder: (context, state) {
-                      if (state is Signuploading) {
-                        return const Center(child: CircularProgressIndicator());
+                      if (state is EditProfileloading) {
+                        return const CircularProgressIndicator();
                       }
                       return CustomTextButton(
-                        text: StringManager.update,
                         onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      ProfileTabScreen()));
+                          if (formKey.currentState!.validate()) {
+                            EditProfileViewModelCubit.get(context)
+                                .putEditProfile(
+                              id: widget.userId,
+                              username: usernameController.text,
+                              firstName: firstNameController.text,
+                              lastName: lastNameController.text,
+                              email: emailController.text,
+                              phone: phoneController.text,
+                            );
+                          }
                         },
+                        text: 'Update',
                       );
                     },
-                  ),
+                  )
                 ],
               ),
             ),

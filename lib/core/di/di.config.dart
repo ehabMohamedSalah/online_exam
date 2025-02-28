@@ -10,6 +10,8 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:get_it/get_it.dart' as _i1;
 import 'package:injectable/injectable.dart' as _i2;
+import 'package:online_exam/domain/usecase/profile_usecase/profile_info_usecase.dart'
+    as _i34;
 import '../../data/datasource_contract/auth_datasource.dart' as _i8;
 import '../../data/datasource_contract/exams_onsubject_datasource.dart' as _i6;
 import '../../data/datasource_contract/profile_datasource.dart' as _i32;
@@ -35,6 +37,7 @@ import '../../domain/usecase/exam_onsubject_usecase.dart' as _i16;
 import '../../domain/usecase/get_all_exam_usecase.dart' as _i12;
 import '../../domain/usecase/profile_usecase/change_password_usecase.dart'
     as _i30;
+import '../../domain/usecase/profile_usecase/edit_profile_usecase.dart' as _i35;
 import '../../presentation/auth/forget_password/forget_password/view_model/forget_password_view_model_cubit.dart'
     as _i28;
 import '../../presentation/auth/forget_password/reset_password/view_model/reset_password_view_model_cubit.dart'
@@ -51,6 +54,10 @@ import '../../presentation/home/tabs/explore_tab/view_model/explore_view_model_c
     as _i15;
 import '../../presentation/home/tabs/profile_tab/change_password/view_model/new_password_view_model_cubit.dart'
     as _i30;
+import '../../presentation/home/tabs/profile_tab/edit_profile_screen/view_model/edit_profile_view_model_cubit.dart'
+    as _i35;
+import '../../presentation/home/tabs/profile_tab/profile_screen/view_model/profile_screen_view_model_cubit.dart'
+    as _i34;
 import '../api/api_manager.dart' as _i3;
 
 extension GetItInjectableX on _i1.GetIt {
@@ -112,6 +119,14 @@ extension GetItInjectableX on _i1.GetIt {
         () => _i32.ProfileRepoImpl(gh<_i32.ProfileDatasource>()));
     gh.factory<_i32.ProfileDatasource>(
         () => _i33.ProfileDatasourceImpl(gh<_i3.ApiManager>()));
+    gh.factory<_i34.ProfileScreenViewModelCubit>(
+        () => _i34.ProfileScreenViewModelCubit(gh<_i34.ProfileInfoUsecase>()));
+    gh.factory<_i34.ProfileInfoUsecase>(
+        () => _i34.ProfileInfoUsecase(gh<_i31.ProfileRepo>()));
+    gh.factory<_i35.EditProfileViewModelCubit>(
+        () => _i35.EditProfileViewModelCubit(gh<_i35.EditProfileUsecase>()));
+    gh.factory<_i35.EditProfileUsecase>(
+        () => _i35.EditProfileUsecase(gh<_i31.ProfileRepo>()));
     return this;
   }
 }

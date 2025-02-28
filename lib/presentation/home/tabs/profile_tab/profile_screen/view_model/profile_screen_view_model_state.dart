@@ -4,3 +4,12 @@ part of 'profile_screen_view_model_cubit.dart';
 sealed class ProfileScreenViewModelState {}
 
 final class ProfileScreenViewModelInitial extends ProfileScreenViewModelState {}
+class ProfileScreenViewModelLoadingState extends ProfileScreenViewModelState{}
+class ProfileScreenViewModelSuccessState extends ProfileScreenViewModelState{
+  SuccessApiResult<ProfileResponseEntity> response;
+  ProfileScreenViewModelSuccessState(this.response);
+}
+class ProfileScreenViewModelErrorState extends ProfileScreenViewModelState{
+  ErrorApiResult exp;
+  ProfileScreenViewModelErrorState(this.exp);
+}
