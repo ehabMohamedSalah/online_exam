@@ -12,7 +12,7 @@ import 'package:online_exam/core/utils/string_manager.dart';
 import 'package:online_exam/presentation/home/tabs/profile_tab/change_password/view_model/new_password_view_model_cubit.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
-  String oldPassword;
+  final String oldPassword;
 
   ChangePasswordScreen(this.oldPassword);
 
@@ -21,18 +21,25 @@ class ChangePasswordScreen extends StatefulWidget {
 }
 
 class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
-  late TextEditingController newPasswordContrller;
+  late TextEditingController newPasswordController;
   late TextEditingController confirmPasswordController;
   late TextEditingController oldPasswordController;
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    newPasswordContrller = TextEditingController();
+    newPasswordController = TextEditingController();
     confirmPasswordController = TextEditingController();
     oldPasswordController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    newPasswordController.dispose();
+    confirmPasswordController.dispose();
+    oldPasswordController.dispose();
+    super.dispose();
   }
 
   @override
@@ -49,78 +56,75 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               children: [
                 AppBarWidget(
                   onpressed: () {
-                    Navigator.pop(context,true);
+                    Navigator.pop(context, true);
                   },
                   title: StringManager.resetPassword,
                 ),
-                SizedBox(
-                  height: 40.h,
-                ),
+                SizedBox(height: 40.h),
                 CustomTextField(
                   labelText: StringManager.currentPassword,
                   hintText: StringManager.currentPassword,
-                  obscureText: false,
+                  obscureText: true,
                   controller: oldPasswordController,
                   keyboard: TextInputType.visiblePassword,
                   validator: (value) {
-                    if (!Constant.regexPass.hasMatch(value ?? "")) {
+                    if (value == null || value.isEmpty) {
                       return StringManager.invalidPassword;
                     }
+                    if (!Constant.regexPass.hasMatch(value)) {
+                      return StringManager.invalidPassword;
+                    }
+                    return null;
                   },
                 ),
-                SizedBox(
-                  height: 32.h,
-                ),
+                SizedBox(height: 32.h),
                 CustomTextField(
                   labelText: StringManager.newPassword,
                   hintText: StringManager.newPassword,
-                  obscureText: false,
-                  controller: newPasswordContrller,
+                  obscureText: true,
+                  controller: newPasswordController,
                   keyboard: TextInputType.visiblePassword,
                   validator: (value) {
-                    if (!Constant.regexPass.hasMatch(value ?? "")) {
+                    if (value == null || value.isEmpty) {
                       return StringManager.invalidPassword;
                     }
+                    if (!Constant.regexPass.hasMatch(value)) {
+                      return StringManager.invalidPassword;
+                    }
+                    return null;
                   },
                 ),
-                SizedBox(
-                  height: 32.h,
-                ),
+                SizedBox(height: 32.h),
                 CustomTextField(
                   labelText: StringManager.confirmPassword,
                   hintText: StringManager.confirmPassword,
-                  obscureText: false,
+                  obscureText: true,
                   controller: confirmPasswordController,
                   keyboard: TextInputType.visiblePassword,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return StringManager.confirmPasswordCannotBeEmpty;
                     }
-                    if (value != newPasswordContrller.text) {
+                    if (value != newPasswordController.text) {
                       return StringManager.passwordNotMatched;
                     }
                     return null;
                   },
                 ),
-                SizedBox(
-                  height: 48.h,
-                ),
-                BlocConsumer<NewPasswordViewModelCubit,
-                    NewPasswordViewModelState>(listener: (context, state) {
-                  switch (state.runtimeType) {
-                    case NewPasswordSuccess:
+                SizedBox(height: 48.h),
+                BlocConsumer<NewPasswordViewModelCubit, NewPasswordViewModelState>(
+                  listener: (context, state) {
+                    if (state is NewPasswordSuccess) {
                       Fluttertoast.showToast(
-                        msg: "✅ Password Changes!",
+                        msg: "✅ Password Changed!",
                         toastLength: Toast.LENGTH_SHORT,
                         gravity: ToastGravity.CENTER,
                         backgroundColor: Colors.green,
                         textColor: Colors.white,
                       );
                       Navigator.pushNamed(context, RouteManager.homeScreen);
-                      break;
-                    case NewPasswordErorr:
-                      String errorMessage =
-                          (state as NewPasswordErorr).exp.exception.toString();
+                    } else if (state is NewPasswordErorr) {
+                      String errorMessage = state.exp.exception.toString();
                       Fluttertoast.showToast(
                         msg: errorMessage,
                         toastLength: Toast.LENGTH_SHORT,
@@ -128,28 +132,26 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                         backgroundColor: Colors.red,
                         textColor: Colors.white,
                       );
-                      break;
-                  }
-                }, builder: (context, state) {
-                  switch (state) {
-                    case NewPasswordloading:
+                    }
+                  },
+                  builder: (context, state) {
+                    if (state is NewPasswordloading) {
                       return const CircularProgressIndicator();
-                    default:
-                      return CustomTextButton(
-                        onPressed: () {
-                          if (formKey.currentState!.validate()) {
-                            NewPasswordViewModelCubit.get(context)
-                                .ChangePassword(
-                              token: oldPasswordController.text,
-                              message: confirmPasswordController.text,
-                            );
-                          }
+                    }
+                    return CustomTextButton(
+                      onPressed: () {
+                        if (formKey.currentState!.validate()) {
+                          NewPasswordViewModelCubit.get(context).ChangePassword(
+                            token: oldPasswordController.text,
+                            message: confirmPasswordController.text,
+                          );
                           Navigator.pop(context, true);
-                        },
-                        text: 'Update',
-                      );
-                  }
-                }),
+                        }
+                      },
+                      text: 'Update',
+                    );
+                  },
+                ),
               ],
             ),
           ),
