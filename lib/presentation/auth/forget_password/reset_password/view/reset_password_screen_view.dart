@@ -10,14 +10,14 @@ import 'package:online_exam/core/resuable-comp/text_button.dart';
 import 'package:online_exam/core/utils/colors_manager.dart';
 import 'package:online_exam/core/utils/routes_manager.dart';
 import 'package:online_exam/core/utils/string_manager.dart';
-import 'package:online_exam/presentation/auth/login/view_model/login_view_model_cubit.dart';
-
 import '../view_model/reset_password_view_model_cubit.dart';
 
 class RestPasswordScreen extends StatefulWidget {
   String email;
+
   RestPasswordScreen(this.email);
-   @override
+
+  @override
   State<RestPasswordScreen> createState() => _RestPasswordScreenState();
 }
 
@@ -36,7 +36,6 @@ class _RestPasswordScreenState extends State<RestPasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       body: BlocProvider(
         create: (BuildContext context) => getIt<ResetPasswordViewModelCubit>(),
@@ -109,53 +108,57 @@ class _RestPasswordScreenState extends State<RestPasswordScreen> {
                     return null;
                   },
                 ),
-
                 SizedBox(
                   height: 48.h,
                 ),
-                BlocConsumer<ResetPasswordViewModelCubit,ResetPasswordViewModelState>(
-                    listener: (context, state) {
-                      switch (state.runtimeType) {
-                        case ResetPasswordSuccess:
-                          Fluttertoast.showToast(
-                            msg: "✅ Password Changes!",
-                            toastLength: Toast.LENGTH_SHORT,
-                            gravity: ToastGravity.CENTER,
-                            backgroundColor: Colors.green,
-                            textColor: Colors.white,
-                          );
+                BlocConsumer<ResetPasswordViewModelCubit,
+                    ResetPasswordViewModelState>(listener: (context, state) {
+                  switch (state.runtimeType) {
+                    case ResetPasswordSuccess:
+                      Fluttertoast.showToast(
+                        msg: "✅ Password Changes!",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.CENTER,
+                        backgroundColor: Colors.green,
+                        textColor: Colors.white,
+                      );
 
-                          Navigator.pushNamed(context, RouteManager.loginScreen);
+                      Navigator.pushNamed(context, RouteManager.loginScreen);
 
-                          break;
-                        case ResetPasswordErorr:
-                          String errorMessage =(state as ResetPasswordErorr).exp.exception.toString();
-                          Fluttertoast.showToast(
-                            msg: errorMessage,
-                            toastLength: Toast.LENGTH_SHORT,
-                            gravity: ToastGravity.CENTER,
-                            backgroundColor: Colors.red,
-                            textColor: Colors.white,
-                          );
-                          break;
-                      }
-                    },
-                    builder: (context, state) {
-                      switch (state) {
-                        case ResetPasswordloading:
-                          return CircularProgressIndicator();
-                        default:
-                          return   CustomTextButton(
-                            onPressed: () {
-                              print(widget.email);
-                              ResetPasswordViewModelCubit.get(context).ResetPassword(email: widget.email, NewPassword: confirmPasswordController.text);
-                            },
-                            text: 'Continue',
-                          );
-
-                      }}),
-
-
+                      break;
+                    case ResetPasswordErorr:
+                      String errorMessage = (state as ResetPasswordErorr)
+                          .exp
+                          .exception
+                          .toString();
+                      Fluttertoast.showToast(
+                        msg: errorMessage,
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.CENTER,
+                        backgroundColor: Colors.red,
+                        textColor: Colors.white,
+                      );
+                      break;
+                  }
+                }, builder: (context, state) {
+                  switch (state) {
+                    case ResetPasswordloading:
+                      return CircularProgressIndicator();
+                    default:
+                      return CustomTextButton(
+                        onPressed: () {
+                          print(widget.email);
+                          ResetPasswordViewModelCubit.get(context)
+                              .ResetPassword(
+                                  email: widget.email,
+                                  NewPassword: confirmPasswordController.text);
+                        },
+                        text: 'Continue',
+                        color: ColorManager.primaryColor,
+                        textColor: ColorManager.backgroundBottomNavBar,
+                      );
+                  }
+                }),
               ],
             ),
           ),

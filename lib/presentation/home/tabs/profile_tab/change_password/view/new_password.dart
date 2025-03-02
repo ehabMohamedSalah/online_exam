@@ -7,6 +7,7 @@ import 'package:online_exam/core/di/di.dart';
 import 'package:online_exam/core/resuable-comp/app_bar.dart';
 import 'package:online_exam/core/resuable-comp/custom_text_field.dart';
 import 'package:online_exam/core/resuable-comp/text_button.dart';
+import 'package:online_exam/core/utils/colors_manager.dart';
 import 'package:online_exam/core/utils/routes_manager.dart';
 import 'package:online_exam/core/utils/string_manager.dart';
 import 'package:online_exam/presentation/home/tabs/profile_tab/change_password/view_model/new_password_view_model_cubit.dart';
@@ -149,6 +150,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                         }
                       },
                       text: 'Update',
+                      color: ColorManager.primaryColor,
+                      textColor: ColorManager.backgroundBottomNavBar,
                     );
                   },
                 ),
