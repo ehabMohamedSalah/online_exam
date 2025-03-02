@@ -6,39 +6,47 @@ import 'package:online_exam/core/constant.dart';
 import 'package:online_exam/core/di/di.dart';
 import 'package:online_exam/core/resuable-comp/app_bar.dart';
 import 'package:online_exam/core/resuable-comp/custom_text_field.dart';
+import 'package:online_exam/core/resuable-comp/text_button.dart';
+import 'package:online_exam/core/utils/routes_manager.dart';
 import 'package:online_exam/core/utils/string_manager.dart';
-import 'package:online_exam/presentation/auth/forget_password/reset_password/view_model/reset_password_view_model_cubit.dart';
-import 'package:online_exam/presentation/home/tabs/profile_tab/profile_screen/view/profile_tab_screen.dart';
+import 'package:online_exam/presentation/home/tabs/profile_tab/change_password/view_model/new_password_view_model_cubit.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
-  String email;
+  final String oldPassword;
 
-  ChangePasswordScreen(this.email);
+  ChangePasswordScreen(this.oldPassword);
 
   @override
   State<ChangePasswordScreen> createState() => _ChangePasswordScreenState();
 }
 
 class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
-  late TextEditingController newPasswordContrller;
+  late TextEditingController newPasswordController;
   late TextEditingController confirmPasswordController;
   late TextEditingController oldPasswordController;
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    newPasswordContrller = TextEditingController();
+    newPasswordController = TextEditingController();
     confirmPasswordController = TextEditingController();
     oldPasswordController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    newPasswordController.dispose();
+    confirmPasswordController.dispose();
+    oldPasswordController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlocProvider(
-        create: (BuildContext context) => getIt<ResetPasswordViewModelCubit>(),
+        create: (BuildContext context) => getIt<NewPasswordViewModelCubit>(),
         child: Padding(
           padding: const EdgeInsets.all(20),
           child: Form(
@@ -48,107 +56,102 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               children: [
                 AppBarWidget(
                   onpressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ProfileTabScreen()),
-                    );
+                    Navigator.pop(context, true);
                   },
                   title: StringManager.resetPassword,
                 ),
-                SizedBox(
-                  height: 40.h,
-                ),
+                SizedBox(height: 40.h),
                 CustomTextField(
                   labelText: StringManager.currentPassword,
                   hintText: StringManager.currentPassword,
-                  obscureText: false,
+                  obscureText: true,
                   controller: oldPasswordController,
                   keyboard: TextInputType.visiblePassword,
                   validator: (value) {
-                    if (!Constant.regexPass.hasMatch(value ?? "")) {
-                      return StringManager.notValidEmail;
-                    }
-                  },
-                ),
-                SizedBox(
-                  height: 32.h,
-                ),
-                CustomTextField(
-                  labelText: StringManager.newPassword,
-                  hintText: StringManager.newPassword,
-                  obscureText: false,
-                  controller: newPasswordContrller,
-                  keyboard: TextInputType.visiblePassword,
-                  validator: (value) {
-                    if (!Constant.regexPass.hasMatch(value ?? "")) {
-                      return StringManager.notValidEmail;
-                    }
-                  },
-                ),
-                SizedBox(
-                  height: 32.h,
-                ),
-                CustomTextField(
-                  labelText: StringManager.confirmPassword,
-                  hintText: StringManager.confirmPassword,
-                  obscureText: false,
-                  controller: confirmPasswordController,
-                  keyboard: TextInputType.visiblePassword,
-                  validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return "Confirm Password cannot be empty";
+                      return StringManager.invalidPassword;
                     }
-                    if (value != newPasswordContrller.text) {
-                      return "Passwords do not match";
+                    if (!Constant.regexPass.hasMatch(value)) {
+                      return StringManager.invalidPassword;
                     }
                     return null;
                   },
                 ),
-                SizedBox(
-                  height: 48.h,
+                SizedBox(height: 32.h),
+                CustomTextField(
+                  labelText: StringManager.newPassword,
+                  hintText: StringManager.newPassword,
+                  obscureText: true,
+                  controller: newPasswordController,
+                  keyboard: TextInputType.visiblePassword,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return StringManager.invalidPassword;
+                    }
+                    if (!Constant.regexPass.hasMatch(value)) {
+                      return StringManager.invalidPassword;
+                    }
+                    return null;
+                  },
                 ),
-                // BlocConsumer<NewPasswordViewModelCubit,NewPasswordViewModelState>(
-                //     listener: (context, state) {
-                //       switch (state.runtimeType) {
-                //         case ResetPasswordSuccess:
-                //           Fluttertoast.showToast(
-                //             msg: "✅ Password Changes!",
-                //             toastLength: Toast.LENGTH_SHORT,
-                //             gravity: ToastGravity.CENTER,
-                //             backgroundColor: Colors.green,
-                //             textColor: Colors.white,
-                //           );
-                //
-                //           Navigator.pushNamed(context, RouteManager.loginScreen);
-                //
-                //           break;
-                //         case ResetPasswordErorr:
-                //           String errorMessage =(state as ResetPasswordErorr).exp.exception.toString();
-                //           Fluttertoast.showToast(
-                //             msg: errorMessage,
-                //             toastLength: Toast.LENGTH_SHORT,
-                //             gravity: ToastGravity.CENTER,
-                //             backgroundColor: Colors.red,
-                //             textColor: Colors.white,
-                //           );
-                //           break;
-                //       }
-                //     },
-                //     builder: (context, state) {
-                //       switch (state) {
-                //         case ResetPasswordloading:
-                //           return CircularProgressIndicator();
-                //         default:
-                //           return   CustomTextButton(
-                //             onPressed: () {
-                //               print(widget.email);
-                //               ResetPasswordViewModelCubit.get(context).ResetPassword(email: widget.email, NewPassword: confirmPasswordController.text);
-                //             },
-                //             text: 'Update',
-                //           );
-                //
-                //       }}),
+                SizedBox(height: 32.h),
+                CustomTextField(
+                  labelText: StringManager.confirmPassword,
+                  hintText: StringManager.confirmPassword,
+                  obscureText: true,
+                  controller: confirmPasswordController,
+                  keyboard: TextInputType.visiblePassword,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return StringManager.confirmPasswordCannotBeEmpty;
+                    }
+                    if (value != newPasswordController.text) {
+                      return StringManager.passwordNotMatched;
+                    }
+                    return null;
+                  },
+                ),
+                SizedBox(height: 48.h),
+                BlocConsumer<NewPasswordViewModelCubit, NewPasswordViewModelState>(
+                  listener: (context, state) {
+                    if (state is NewPasswordSuccess) {
+                      Fluttertoast.showToast(
+                        msg: "✅ Password Changed!",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.CENTER,
+                        backgroundColor: Colors.green,
+                        textColor: Colors.white,
+                      );
+                      Navigator.pushNamed(context, RouteManager.homeScreen);
+                    } else if (state is NewPasswordErorr) {
+                      String errorMessage = state.exp.exception.toString();
+                      Fluttertoast.showToast(
+                        msg: errorMessage,
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.CENTER,
+                        backgroundColor: Colors.red,
+                        textColor: Colors.white,
+                      );
+                    }
+                  },
+                  builder: (context, state) {
+                    if (state is NewPasswordloading) {
+                      return const CircularProgressIndicator();
+                    }
+                    return CustomTextButton(
+                      onPressed: () {
+                        if (formKey.currentState!.validate()) {
+                          NewPasswordViewModelCubit.get(context).ChangePassword(
+                            token: oldPasswordController.text,
+                            message: confirmPasswordController.text,
+                          );
+                          Navigator.pop(context, true);
+                        }
+                      },
+                      text: 'Update',
+                    );
+                  },
+                ),
               ],
             ),
           ),

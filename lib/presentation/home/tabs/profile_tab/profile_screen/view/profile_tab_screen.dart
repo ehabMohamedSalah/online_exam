@@ -1,35 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:online_exam/core/api/api_result.dart';
 import 'package:online_exam/core/di/di.dart';
-import 'package:online_exam/core/resuable-comp/app_bar.dart';
 import 'package:online_exam/core/resuable-comp/custom_text_field.dart';
 import 'package:online_exam/core/resuable-comp/text_button.dart';
 import 'package:online_exam/core/utils/colors_manager.dart';
-import 'package:online_exam/core/utils/routes_manager.dart';
 import 'package:online_exam/core/utils/string_manager.dart';
-import 'package:online_exam/presentation/auth/signUp/view_Model/signup_view_model_cubit.dart';
+import 'package:online_exam/data/model/profile_tab/image_provider_model.dart';
+import 'package:online_exam/data/model/profile_tab/user_profile.dart';
+import 'package:online_exam/domain/entity/profile_tab/profile_entry/profile_response_entity.dart';
 import 'dart:io';
- import 'package:online_exam/presentation/home/tabs/profile_tab/change_password/view/new_password.dart';
+import 'package:online_exam/presentation/home/tabs/profile_tab/change_password/view/new_password.dart';
 import 'package:online_exam/presentation/home/tabs/profile_tab/edit_profile_screen/view/edit_profile_tab_screen.dart';
+import 'package:online_exam/presentation/home/tabs/profile_tab/profile_screen/view_model/profile_screen_view_model_cubit.dart';
+import 'package:provider/provider.dart';
 
 class ProfileTabScreen extends StatefulWidget {
+  final String userId;
+
+  ProfileTabScreen({required this.userId});
+
   @override
   State<ProfileTabScreen> createState() => _ProfileTabScreenState();
 }
 
 class _ProfileTabScreenState extends State<ProfileTabScreen> {
-  TextEditingController usernameController = TextEditingController();
-  TextEditingController firstNameController = TextEditingController();
-  TextEditingController lastNameController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-  TextEditingController phoneController = TextEditingController();
-  TextInputType textInputType = TextInputType.text;
-  TextInputType emailInputType = TextInputType.emailAddress;
-  TextInputType phoneInputType = TextInputType.phone;
+  late TextEditingController usernameController;
+  late TextEditingController firstNameController;
+  late TextEditingController lastNameController;
+  late TextEditingController emailController;
+  late TextEditingController passwordController;
+  late TextEditingController phoneController;
 
   String? password;
 
@@ -38,6 +41,10 @@ class _ProfileTabScreenState extends State<ProfileTabScreen> {
   File? _selectedImage;
 
   final ImagePicker _picker = ImagePicker();
+
+  late UserProfile userProfile;
+
+  bool isLoading = true;
 
   Future<void> _pickImage(ImageSource source) async {
     final pickedFile = await _picker.pickImage(source: source);
@@ -48,63 +55,109 @@ class _ProfileTabScreenState extends State<ProfileTabScreen> {
     }
   }
 
-  void _showImagePicker() {
+  @override
+  void initState() {
+    super.initState();
+    usernameController = TextEditingController();
+    firstNameController = TextEditingController();
+    lastNameController = TextEditingController();
+    emailController = TextEditingController();
+    phoneController = TextEditingController();
+    passwordController = TextEditingController();
+    _fetchProfileData();
+  }
+
+  @override
+  void dispose() {
+    usernameController.dispose();
+    firstNameController.dispose();
+    lastNameController.dispose();
+    emailController.dispose();
+    phoneController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
+  void _navigateToEditProfile() async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditProfileTabScreen(userId: widget.userId),
+      ),
+    );
+
+    if (result == true) {
+      _fetchProfileData();
+    }
+  }
+
+  void _fetchProfileData() async {
+    var response = await getIt<ProfileScreenViewModelCubit>()
+        .getProfileInfoUsecase
+        .call(id: widget.userId);
+    if (response is SuccessApiResult<ProfileResponseEntity> &&
+        response.data!.user != null) {
+      setState(() {
+        userProfile = UserProfile.fromEntity(response.data!.user!);
+        usernameController =
+            TextEditingController(text: userProfile.username ?? "");
+        firstNameController =
+            TextEditingController(text: userProfile.firstName ?? "");
+        lastNameController =
+            TextEditingController(text: userProfile.lastName ?? "");
+        emailController = TextEditingController(text: userProfile.email ?? "");
+        phoneController = TextEditingController(text: userProfile.phone ?? "");
+        passwordController = TextEditingController(text: "********");
+      });
+    } else {
+      print("Error fetching profile data");
+    }
+  }
+  void _showImagePicker(BuildContext context) {
     showModalBottomSheet(
       context: context,
-      isScrollControlled: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      builder: (context) => Container(
-        padding: const EdgeInsets.all(20),
-        height: MediaQuery.of(context).size.height * 0.25,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Text(
-              "Choose an option",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 20),
-            ListTile(
-              leading: const Icon(Icons.camera, size: 30),
-              title: const Text("Take a photo", style: TextStyle(fontSize: 16)),
-              onTap: () {
-                Navigator.pop(context);
-                _pickImage(ImageSource.camera);
-              },
-            ),
-            const Divider(),
-            ListTile(
-              leading: const Icon(Icons.photo_library, size: 30),
-              title: const Text("Choose from gallery",
-                  style: TextStyle(fontSize: 16)),
-              onTap: () {
-                Navigator.pop(context);
-                _pickImage(ImageSource.gallery);
-              },
-            ),
-          ],
+      builder: (context) => Consumer<ImageProviderModel>(
+        builder: (context, imageProvider, child) => Container(
+          padding: const EdgeInsets.all(20),
+          height: MediaQuery.of(context).size.height * 0.25,
+          child: Column(
+            children: [
+              const Text(
+                "Choose an option",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 20),
+              ListTile(
+                leading: const Icon(Icons.camera, size: 30),
+                title: const Text("Take a photo", style: TextStyle(fontSize: 16)),
+                onTap: () {
+                  Navigator.pop(context);
+                  imageProvider.pickImage(ImageSource.camera);
+                },
+              ),
+              const Divider(),
+              ListTile(
+                leading: const Icon(Icons.photo_library, size: 30),
+                title: const Text("Choose from gallery", style: TextStyle(fontSize: 16)),
+                onTap: () {
+                  Navigator.pop(context);
+                  imageProvider.pickImage(ImageSource.gallery);
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
   @override
-  void initState() {
-    super.initState();
-    usernameController.text = "اسم المستخدم الافتراضي";
-    firstNameController.text = "الاسم الأول";
-    lastNameController.text = "الاسم الأخير";
-    passwordController.text = "111111";
-    emailController.text = "example@email.com";
-    phoneController.text = "0123456789";
-  }
-
-  @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (BuildContext context) => getIt<SignupViewModelCubit>(),
+      create: (BuildContext context) => getIt<ProfileScreenViewModelCubit>(),
       child: Scaffold(
         appBar: AppBar(
           title: Text(
@@ -122,50 +175,39 @@ class _ProfileTabScreenState extends State<ProfileTabScreen> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      CircleAvatar(
-                        radius: 50,
-                        backgroundColor: Colors.grey.shade300,
-                        backgroundImage: _selectedImage != null
-                            ? FileImage(_selectedImage!)
-                            : null,
-                        child: _selectedImage == null
-                            ? const Icon(Icons.person,
-                                size: 50, color: ColorManager.labelLarge)
-                            : null,
-                      ),
-                      Positioned(
-                        bottom: 0,
-                        right: 0,
-                        child: GestureDetector(
-                          onTap: _showImagePicker,
-                          child: const CircleAvatar(
-                            radius: 20,
-                            backgroundColor: ColorManager.primaryColor,
-                            child: Icon(Icons.camera_alt,
-                                size: 22,
-                                color: ColorManager.backgroundBottomNavBar),
+                  Consumer<ImageProviderModel>(
+                    builder: (context, imageProvider, child) => Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        CircleAvatar(
+                          radius: 50,
+                          backgroundColor: Colors.grey.shade300,
+                          backgroundImage: imageProvider.selectedImage != null
+                              ? FileImage(imageProvider.selectedImage!)
+                              : null,
+                          child: imageProvider.selectedImage == null
+                              ? const Icon(Icons.person, size: 50, color: ColorManager.labelLarge)
+                              : null,
+                        ),
+                        Positioned(
+                          bottom: 0,
+                          right: 0,
+                          child: GestureDetector(
+                            onTap: () => _showImagePicker(context),
+                            child: const CircleAvatar(
+                              radius: 20,
+                              backgroundColor: ColorManager.primaryColor,
+                              child: Icon(Icons.camera_alt, size: 22, color: ColorManager.backgroundBottomNavBar),
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                  SizedBox(
-                    height: 50.h,
-                  ),
+                  SizedBox(height: 50.h),
                   CustomTextField(
                     labelText: "User name",
-                    hintText: "Enter your user name",
                     controller: usernameController,
-                    keyboard: textInputType,
-                    validator: (data) {
-                      if (data == null || data.isEmpty) {
-                        return 'This user name is not valid';
-                      }
-                      return null;
-                    },
                     obscureText: false,
                   ),
                   const SizedBox(height: 30),
@@ -175,15 +217,7 @@ class _ProfileTabScreenState extends State<ProfileTabScreen> {
                       Expanded(
                         child: CustomTextField(
                           labelText: "First name",
-                          hintText: "Enter first name",
                           controller: firstNameController,
-                          keyboard: textInputType,
-                          validator: (data) {
-                            if (data == null || data.isEmpty) {
-                              return 'This first name is not valid';
-                            }
-                            return null;
-                          },
                           obscureText: false,
                         ),
                       ),
@@ -191,15 +225,7 @@ class _ProfileTabScreenState extends State<ProfileTabScreen> {
                       Expanded(
                         child: CustomTextField(
                           labelText: "Last name",
-                          hintText: "Enter last name",
                           controller: lastNameController,
-                          keyboard: textInputType,
-                          validator: (data) {
-                            if (data == null || data.isEmpty) {
-                              return 'This last name is not valid';
-                            }
-                            return null;
-                          },
                           obscureText: false,
                         ),
                       ),
@@ -208,15 +234,7 @@ class _ProfileTabScreenState extends State<ProfileTabScreen> {
                   const SizedBox(height: 30),
                   CustomTextField(
                     labelText: "Email",
-                    hintText: "Enter your email",
                     controller: emailController,
-                    keyboard: emailInputType,
-                    validator: (data) {
-                      if (data == null || data.isEmpty) {
-                        return 'This email is not valid';
-                      }
-                      return null;
-                    },
                     obscureText: false,
                   ),
                   const SizedBox(height: 30),
@@ -225,13 +243,9 @@ class _ProfileTabScreenState extends State<ProfileTabScreen> {
                     children: [
                       CustomTextField(
                         labelText: "Password",
-                        hintText: "Enter password",
                         controller: passwordController,
-                        keyboard: TextInputType.text,
-                        validator: (data) =>
-                            data!.isEmpty ? 'This password is not valid' : null,
-                        obscureText: true,
                         obscuringCharacter: "*",
+                        obscureText: true,
                       ),
                       Positioned(
                         right: 10,
@@ -259,63 +273,13 @@ class _ProfileTabScreenState extends State<ProfileTabScreen> {
                   const SizedBox(height: 30),
                   CustomTextField(
                     labelText: "Phone number",
-                    hintText: "Enter phone number",
                     controller: phoneController,
-                    keyboard: phoneInputType,
-                    validator: (data) {
-                      if (data == null || data.isEmpty) {
-                        return 'This phone number is not valid';
-                      }
-                      return null;
-                    },
                     obscureText: false,
                   ),
-                  const SizedBox(height: 10),
-                  BlocConsumer<SignupViewModelCubit, SignupViewModelState>(
-                    listener: (context, state) {
-                      if (state is SignupSuccess) {
-                        Fluttertoast.showToast(
-                          msg: "Signup is Success",
-                          toastLength: Toast.LENGTH_SHORT,
-                          gravity: ToastGravity.CENTER,
-                          timeInSecForIosWeb: 1,
-                          backgroundColor: Colors.green,
-                          textColor: Colors.white,
-                          fontSize: 16.0,
-                        );
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ProfileTabScreen()),
-                        );
-                      }
-                      if (state is SignupErorr) {
-                        Fluttertoast.showToast(
-                          msg: state.ErrorMessage,
-                          toastLength: Toast.LENGTH_SHORT,
-                          gravity: ToastGravity.CENTER,
-                          timeInSecForIosWeb: 1,
-                          backgroundColor: Colors.red,
-                          textColor: Colors.white,
-                          fontSize: 16.0,
-                        );
-                      }
-                    },
-                    builder: (context, state) {
-                      if (state is Signuploading) {
-                        return const Center(child: CircularProgressIndicator());
-                      }
-                      return CustomTextButton(
-                        text: StringManager.update,
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      EditProfileTabScreen()));
-                        },
-                      );
-                    },
+                  const SizedBox(height: 30),
+                  CustomTextButton(
+                    text: StringManager.update,
+                    onPressed: _navigateToEditProfile,
                   ),
                 ],
               ),

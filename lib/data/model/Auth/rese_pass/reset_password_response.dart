@@ -4,13 +4,13 @@ import '../../../../domain/entity/Auth/reset_pass_response_entity/reset_passowrd
 /// code : 400
 /// token : "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YjI0Y2Q1ODZhMDI0ZjA2ZWEyNzc3YyIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzM5ODU2NDIyfQ.xXnCxBWkjHgYf1dPEuX6MfqIF7aBg8Vg2GGBG_W_DEM"
 
-class ResetPasswordResponseModel {
-  ResetPasswordResponseModel({
+class ResetPasswordResponse {
+  ResetPasswordResponse({
       this.message, 
       this.code, 
       this.token,});
 
-  ResetPasswordResponseModel.fromJson(dynamic json) {
+  ResetPasswordResponse.fromJson(dynamic json) {
     message = json['message'];
     code = json['code'];
     token = json['token'];
@@ -18,10 +18,10 @@ class ResetPasswordResponseModel {
   String? message;
   int? code;
   String? token;
-ResetPasswordResponseModel copyWith({  String? message,
+ResetPasswordResponse copyWith({  String? message,
   int? code,
   String? token,
-}) => ResetPasswordResponseModel(  message: message ?? this.message,
+}) => ResetPasswordResponse(  message: message ?? this.message,
   code: code ?? this.code,
   token: token ?? this.token,
 );
