@@ -10,8 +10,18 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:get_it/get_it.dart' as _i1;
 import 'package:injectable/injectable.dart' as _i2;
+import 'package:online_exam/data/datasource_contract/question_datasource.dart'
+    as _i37;
+import 'package:online_exam/data/datasource_impl/question_impl_datasource.dart'
+    as _i36;
+import 'package:online_exam/data/repo_impl/question_repo_impl.dart' as _i39;
+import 'package:online_exam/domain/repo_contract/question_repo.dart' as _i38;
 import 'package:online_exam/domain/usecase/profile_usecase/profile_info_usecase.dart'
     as _i34;
+import 'package:online_exam/domain/usecase/question_usecase/check_question_usecase.dart'
+    as _i40;
+import 'package:online_exam/presentation/exam/score_screen/view_model/score_view_model_cubit.dart'
+    as _i41;
 import '../../data/datasource_contract/auth_datasource.dart' as _i8;
 import '../../data/datasource_contract/exams_onsubject_datasource.dart' as _i6;
 import '../../data/datasource_contract/profile_datasource.dart' as _i32;
@@ -127,6 +137,17 @@ extension GetItInjectableX on _i1.GetIt {
         () => _i35.EditProfileViewModelCubit(gh<_i35.EditProfileUsecase>()));
     gh.factory<_i35.EditProfileUsecase>(
         () => _i35.EditProfileUsecase(gh<_i31.ProfileRepo>()));
+
+    gh.factory<_i36.QuestionDatasourceImpl>(
+        () => _i36.QuestionDatasourceImpl(gh<_i3.ApiManager>()));
+    gh.factory<_i37.QuestionDatasource>(
+        () => _i36.QuestionDatasourceImpl(gh<_i3.ApiManager>()));
+    gh.factory<_i38.QuestionRepo>(
+        () => _i39.QuestionRepoImpl(gh<_i37.QuestionDatasource>()));
+    gh.factory<_i40.CheckQuestionUsecase>(
+        () => _i40.CheckQuestionUsecase(gh<_i38.QuestionRepo>()));
+    gh.factory<_i41.ScoreViewModelCubit>(
+        () => _i41.ScoreViewModelCubit(gh<_i40.CheckQuestionUsecase>()));
     return this;
   }
 }
