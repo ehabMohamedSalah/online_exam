@@ -25,9 +25,9 @@ class _ExamScoreScreenState extends State<ExamScoreScreen> {
 
   GlobalKey<FormState> formKey = GlobalKey();
 
-  String? reslt;
-  String? correctReslt;
-  String? incorrectReslt;
+  String? total;
+  String? correct;
+  String? wrong;
 
   @override
   void initState() {
@@ -78,7 +78,7 @@ class _ExamScoreScreenState extends State<ExamScoreScreen> {
                   CircularPercentIndicator(
                     radius: 80,
                     lineWidth: 6,
-                    center: Text(reslt ?? "0%",
+                    center: Text(total ?? "0%",
                         style: const TextStyle(
                             fontSize: 22, fontWeight: FontWeight.bold)),
                     progressColor: ColorManager.primaryColor,
@@ -90,7 +90,7 @@ class _ExamScoreScreenState extends State<ExamScoreScreen> {
                     children: [
                       ScoreResltWidet(
                         title: StringManager.correct,
-                        reslt: correctReslt ?? "0",
+                        reslt: correct ?? "0",
                         color: ColorManager.primaryColor,
                       ),
                       SizedBox(
@@ -98,7 +98,7 @@ class _ExamScoreScreenState extends State<ExamScoreScreen> {
                       ),
                       ScoreResltWidet(
                         title: StringManager.inCorrect,
-                        reslt: incorrectReslt ?? "0",
+                        reslt: wrong ?? "0",
                         color: ColorManager.failureColor,
                       )
                     ],
