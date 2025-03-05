@@ -12,7 +12,9 @@ import 'package:online_exam/presentation/exam/score_screen/view_model/score_view
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
 class ExamScoreScreen extends StatefulWidget {
-  ExamScoreScreen({super.key});
+  final String qId;
+
+  ExamScoreScreen({super.key, required this.qId});
 
   @override
   State<ExamScoreScreen> createState() => _ExamScoreScreenState();
@@ -107,7 +109,9 @@ class _ExamScoreScreenState extends State<ExamScoreScreen> {
                 height: 80.h,
               ),
               CustomTextButton(
-                onPressed: () {},
+                onPressed: () {
+                  ///هنا المفروض يروح علي result
+                },
                 text: StringManager.showResults,
                 color: ColorManager.primaryColor,
                 textColor: ColorManager.backgroundOTP,
@@ -116,7 +120,9 @@ class _ExamScoreScreenState extends State<ExamScoreScreen> {
                 height: 24.h,
               ),
               CustomTextButton(
-                onPressed: () {},
+                onPressed: () {
+                  ///هنا المفروض يروح علي exam تاني
+                },
                 text: StringManager.startAgain,
                 color: Colors.white,
                 textColor: ColorManager.primaryColor,
