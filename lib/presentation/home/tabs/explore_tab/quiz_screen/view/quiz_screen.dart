@@ -48,8 +48,7 @@ class _QuizScreenState extends State<QuizScreen> {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) =>
-      getIt<Question0nexamCubit>()
-        ..getQuestion(examID: widget.examID),
+          getIt<Question0nexamCubit>()..getQuestion(examID: widget.examID),
       child: Scaffold(
         body: Padding(
           padding: EdgeInsets.all(20.0),
@@ -67,17 +66,20 @@ class _QuizScreenState extends State<QuizScreen> {
               if (state is QuestionOnExamSuccessState) {
                 var questions = state.response.data?.questions ?? [];
 
-
                 if (questions.isEmpty) {
                   return const Center(child: Text("No questions available"));
                 }
 
                 /// ✅ تأمين قيمة `duration` لتجنب `setState` بعد `dispose`
-                if (questions.isNotEmpty && totalSeconds == 0 && timer == null) {
+                if (questions.isNotEmpty &&
+                    totalSeconds == 0 &&
+                    timer == null) {
                   WidgetsBinding.instance.addPostFrameCallback((_) {
                     if (mounted) {
                       setState(() {
-                        totalSeconds=(questions.first.exam?.duration ?? 0) * 60;                      });
+                        totalSeconds =
+                            (questions.first.exam?.duration ?? 0) * 60;
+                      });
                       startTimer();
                     }
                   });
@@ -99,13 +101,10 @@ class _QuizScreenState extends State<QuizScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Row(children: [
-                          const Icon(
-                              Icons.arrow_back_ios_new, color: Colors.black,
-                              size: 25),
-                          Text("Exam", style: Theme
-                              .of(context)
-                              .textTheme
-                              .labelLarge),
+                          const Icon(Icons.arrow_back_ios_new,
+                              color: Colors.black, size: 25),
+                          Text("Exam",
+                              style: Theme.of(context).textTheme.labelLarge),
                         ]),
                         Row(children: [
                           const SizedBox(
@@ -113,17 +112,15 @@ class _QuizScreenState extends State<QuizScreen> {
                           Text(
                             formatTime(totalSeconds),
                             style: TextStyle(
-                                color: totalSeconds < 900 ? Colors.red : Colors
-                                    .green),
+                                color: totalSeconds < 900
+                                    ? Colors.red
+                                    : Colors.green),
                           ),
                         ]),
                       ],
                     ),
                     Text("Question ${currentIndex + 1} of ${questions.length}",
-                        style: Theme
-                            .of(context)
-                            .textTheme
-                            .bodyMedium),
+                        style: Theme.of(context).textTheme.bodyMedium),
                     LinearProgressIndicator(
                       value: (currentIndex + 1) / questions.length,
                       backgroundColor: Colors.grey[300],
@@ -131,44 +128,45 @@ class _QuizScreenState extends State<QuizScreen> {
                       minHeight: 8,
                     ),
                     const SizedBox(height: 20),
-                    Text(question.question ?? "No Question", style: Theme
-                        .of(context)
-                        .textTheme
-                        .labelLarge),
+                    Text(question.question ?? "No Question",
+                        style: Theme.of(context).textTheme.labelLarge),
                     const SizedBox(height: 20),
                     Column(
-                      children: List.generate(
-                          question.answers?.length ?? 0, (index) {
-                        String option = question.answers?[index]
-                            .answer as String? ?? "";
+                      children:
+                          List.generate(question.answers?.length ?? 0, (index) {
+                        String option =
+                            question.answers?[index].answer as String? ?? "";
 
                         return isMultiple
                             ? CheckboxListTile(
-                          title: Text(option),
-                          value: selectedAnswers[currentIndex].contains(index),
-                          onChanged: (bool? value) {
-                            setState(() {
-                              if (value == true) {
-                                selectedAnswers[currentIndex].add(index);
-                              } else {
-                                selectedAnswers[currentIndex].remove(index);
-                              }
-                            });
-                          },
-                        )
+                                title: Text(option),
+                                value: selectedAnswers[currentIndex]
+                                    .contains(index),
+                                onChanged: (bool? value) {
+                                  setState(() {
+                                    if (value == true) {
+                                      selectedAnswers[currentIndex].add(index);
+                                    } else {
+                                      selectedAnswers[currentIndex]
+                                          .remove(index);
+                                    }
+                                  });
+                                },
+                              )
                             : RadioListTile<int>(
-                          title: Text(option),
-                          value: index,
-                          groupValue: selectedAnswers[currentIndex].isEmpty
-                              ? -1
-                              : selectedAnswers[currentIndex].first,
-                          // ✅ تأمين قيمة `groupValue`
-                          onChanged: (value) {
-                            setState(() {
-                              selectedAnswers[currentIndex] = [value!];
-                            });
-                          },
-                        );
+                                title: Text(option),
+                                value: index,
+                                groupValue:
+                                    selectedAnswers[currentIndex].isEmpty
+                                        ? -1
+                                        : selectedAnswers[currentIndex].first,
+                                // ✅ تأمين قيمة `groupValue`
+                                onChanged: (value) {
+                                  setState(() {
+                                    selectedAnswers[currentIndex] = [value!];
+                                  });
+                                },
+                              );
                       }),
                     ),
                     SizedBox(height: 20.h),
@@ -177,8 +175,9 @@ class _QuizScreenState extends State<QuizScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         QuizButton(
-                          ontap: currentIndex > 0 ? () =>
-                              setState(() => currentIndex--) : null,
+                          ontap: currentIndex > 0
+                              ? () => setState(() => currentIndex--)
+                              : null,
                           text: const Text("Back",
                               style: TextStyle(color: Colors.blue)),
                           backgroundcolor: Colors.white,
@@ -186,16 +185,50 @@ class _QuizScreenState extends State<QuizScreen> {
                         QuizButton(
                           ontap: currentIndex == questions.length - 1
                               ? () {
-                          //  Navigator.push(context, MaterialPageRoute(builder: (context) => ExamScoreScreen( qId: questions,)));
+                                  // تجهيز قائمة تحتوي على جميع الإجابات لكل الأسئلة كـ List<Map<String, dynamic>>
+                                  List<Map<String, dynamic>> answersList = [];
 
-                          }
+                                  for (int i = 0; i < questions.length; i++) {
+                                    if (selectedAnswers[i].isNotEmpty) {
+                                      // إضافة بيانات السؤال إلى القائمة كـ Map
+                                      answersList.add({
+                                        "questionId":
+                                            questions[i].id, // ✅ رقم السؤال
+                                        "correct": selectedAnswers[i]
+                                            .map((index) => questions[i]
+                                                .answers?[index]
+                                                .key)
+                                            .toList(), // ✅ جميع الأجوبة المختارة لهذا السؤال
+                                      });
+
+                                    }
+                                  }
+                                  print(answersList);
+                                  Map<String, dynamic> quizData = {
+                                    "answers": answersList, // ✅ قائمة تحتوي على جميع الإجابات كـ List<Map<String, dynamic>>
+                                    "time": (questions.first.exam?.duration ?? 0) * 60 - totalSeconds,
+                                  };
+
+                                  print(
+                                      "✅ Sending quizData: $quizData"); // ✅ اختبار صحة البيانات قبل الإرسال
+
+                                  // الانتقال مع تمرير البيانات
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ExamScoreScreen(
+                                        quizData:
+                                            quizData, // ✅ تمرير البيانات إلى الشاشة التالية
+                                      ),
+                                    ),
+                                  );
+                                }
                               : () => setState(() => currentIndex++),
                           text: Text(
                             currentIndex == questions.length - 1
                                 ? "Submit"
                                 : "Next",
-                            style: Theme
-                                .of(context)
+                            style: Theme.of(context)
                                 .textTheme
                                 .labelMedium
                                 ?.copyWith(color: Colors.white),
@@ -204,7 +237,9 @@ class _QuizScreenState extends State<QuizScreen> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 50.h,)
+                    SizedBox(
+                      height: 50.h,
+                    )
                   ],
                 );
               }
@@ -218,8 +253,6 @@ class _QuizScreenState extends State<QuizScreen> {
 
   void submitQuiz() {
     print("Quiz submitted successfully!");
-
-
   }
 
   void printQuestionsTesttt(String question) {
