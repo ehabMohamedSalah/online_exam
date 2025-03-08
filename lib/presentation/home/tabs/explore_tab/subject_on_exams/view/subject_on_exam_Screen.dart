@@ -5,6 +5,8 @@ import 'package:online_exam/core/di/di.dart';
 import 'package:online_exam/presentation/home/tabs/explore_tab/subject_on_exams/view_model/subject_on_exam_cubit.dart';
 
 import '../../../../../../core/resuable-comp/app_bar.dart';
+ import '../../start_exam_screen/start_exam_screen.dart';
+import '../../view/widgets/exam_widget.dart';
 
 class SubjectOnExamsScreen extends StatelessWidget {
   final String subjectID;
@@ -62,21 +64,12 @@ class SubjectOnExamsScreen extends StatelessWidget {
                                   padding: REdgeInsets.all(16.0),
                                   itemBuilder: (context, index) {
                                     final item = exams[index];
-                                    return Card(
-                                      elevation: 2,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                      child: ListTile(
-                                        leading: Image.asset("assets/images/Profit.png",height: 120.h,),
-                                        title: Text(item.title ?? "No Title"),
-                                        onTap: () {
-                                          if (item.id != null) {
-
-                                          }
+                                    return InkWell(
+                                        onTap: (){
+                                          Navigator.push(context, MaterialPageRoute(builder: (context) => StartExamScreen(item)));
+                                          print(item.id);
                                         },
-                                      ),
-                                    );
+                                        child: ExamWidget(item));
                                   },
                                   separatorBuilder: (context, index) => SizedBox(height: 10.h),
                                   itemCount: exams.length,
