@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:online_exam/core/resuable-comp/text_button.dart';
+import 'package:online_exam/core/utils/colors_manager.dart';
 
 class DialogHelper {
   static void showFinishDialog(BuildContext context) {
@@ -23,6 +24,8 @@ class DialogHelper {
         ),
         actions: [
           CustomTextButton(
+            textColor: Colors.white,
+            color: ColorManager.primaryColor,
             onPressed: () => Navigator.pop(context), // ✅ Pass as a function
             text: "View Score",
           ),

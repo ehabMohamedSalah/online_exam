@@ -8,6 +8,7 @@ import 'package:online_exam/presentation/home/tabs/explore_tab/quiz_screen/view/
 import 'package:online_exam/presentation/home/tabs/explore_tab/quiz_screen/view/widget/helper_func/format_func.dart';
 import 'package:online_exam/presentation/home/tabs/explore_tab/quiz_screen/view_model/question0nexam_cubit.dart';
 import '../../../../../../core/di/di.dart';
+import '../../../../../exam/score_screen/view/exam_score_screen.dart';
 
 class QuizScreen extends StatefulWidget {
   final String examID;
@@ -184,7 +185,10 @@ class _QuizScreenState extends State<QuizScreen> {
                         ),
                         QuizButton(
                           ontap: currentIndex == questions.length - 1
-                              ? submitQuiz
+                              ? () {
+                          //  Navigator.push(context, MaterialPageRoute(builder: (context) => ExamScoreScreen( qId: questions,)));
+
+                          }
                               : () => setState(() => currentIndex++),
                           text: Text(
                             currentIndex == questions.length - 1
@@ -214,6 +218,8 @@ class _QuizScreenState extends State<QuizScreen> {
 
   void submitQuiz() {
     print("Quiz submitted successfully!");
+
+
   }
 
   void printQuestionsTesttt(String question) {
