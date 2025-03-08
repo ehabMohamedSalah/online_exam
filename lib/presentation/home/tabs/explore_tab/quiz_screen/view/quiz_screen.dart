@@ -76,7 +76,7 @@ class _QuizScreenState extends State<QuizScreen> {
                   WidgetsBinding.instance.addPostFrameCallback((_) {
                     if (mounted) {
                       setState(() {
-                        (questions.first.exam?.duration ?? 0) * 60;                      });
+                        totalSeconds=(questions.first.exam?.duration ?? 0) * 60;                      });
                       startTimer();
                     }
                   });
