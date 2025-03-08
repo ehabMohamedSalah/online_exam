@@ -2,20 +2,16 @@ import 'package:flutter/material.dart';
 
 class CustomTextField extends StatelessWidget {
   TextEditingController controller;
-  TextInputType keyboard;
+  TextInputType? keyboard;
   String labelText;
-  String hintText;
+  String? hintText;
   bool obscureText;
   String? Function(String?)? validator;
   String obscuringCharacter;
 
   CustomTextField(
-      {required this.labelText,
-      required this.hintText,
-      required this.controller,
-      required this.keyboard,
-      required this.validator,
-      required this.obscureText,
+      {required this.labelText, this.hintText,
+      required this.controller, this.keyboard, this.validator, this.obscureText=false,
       this.obscuringCharacter = '*'});
 
   @override

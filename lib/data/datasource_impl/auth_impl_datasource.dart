@@ -7,10 +7,10 @@ import 'package:online_exam/core/api/api_result.dart';
 import 'package:online_exam/core/api/endpoints.dart';
 import 'package:online_exam/data/datasource_contract/auth_datasource.dart';
 import 'package:online_exam/data/model/Auth/authResponse.dart';
-import 'package:online_exam/data/model/Auth/forget_passowrd/ForgetPasswordResponse.dart';
-import 'package:online_exam/data/model/Auth/rese_pass/ResetPasswordResponseModel.dart';
-import 'package:online_exam/data/model/Auth/verify_code/Verify_response.dart';
-import 'package:online_exam/domain/entity/Auth/foreget_pass_entity/ForgetPassEntity.dart';
+import 'package:online_exam/data/model/Auth/forget_passowrd/forget_password_response.dart';
+import 'package:online_exam/data/model/Auth/rese_pass/reset_password_response.dart';
+import 'package:online_exam/data/model/Auth/verify_code/verify_response.dart';
+import 'package:online_exam/domain/entity/Auth/foreget_pass_entity/forget_pass_entity.dart';
 import 'package:online_exam/domain/entity/Auth/reset_pass_response_entity/reset_passowrd_response_entity.dart';
 import 'package:online_exam/domain/entity/Auth/verify_response_entity/verify_response.dart';
 
@@ -137,7 +137,7 @@ class AuthDatasourceImpl extends AuthDatasource {
         },
       );
 
-      ResetPasswordResponseModel resetPasswordResponseModel = ResetPasswordResponseModel
+      ResetPasswordResponse resetPasswordResponseModel = ResetPasswordResponse
           .fromJson(
           response.data);
       ResetPasswordResponseEntity resetPasswordResponseEntity = resetPasswordResponseModel
