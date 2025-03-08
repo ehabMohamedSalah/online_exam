@@ -5,6 +5,7 @@ import 'package:online_exam/core/resuable-comp/custom_text_field.dart';
 import 'package:online_exam/core/resuable-comp/text_button.dart';
 
 import '../../../../../domain/entity/get_all_exam_on_Subject_entity_response/exams_entity.dart';
+import '../quiz_screen/view/quiz_screen.dart';
 
 class StartExamScreen extends StatelessWidget {
   ExamsEntity exam;
@@ -82,7 +83,10 @@ class StartExamScreen extends StatelessWidget {
               ],
             ),
             SizedBox(height: 50,),
-            CustomTextButton(onPressed: (){}, text: "Start"),
+            CustomTextButton(onPressed: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context) => QuizScreen(exam.id??"")));
+              print(exam.id??"mfesh id le al exam asln fe al start exam screen");
+            }, text: "Start"),
           ],
         ),
       ),

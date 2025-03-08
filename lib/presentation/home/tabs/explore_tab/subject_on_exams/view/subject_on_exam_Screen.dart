@@ -5,7 +5,7 @@ import 'package:online_exam/core/di/di.dart';
 import 'package:online_exam/presentation/home/tabs/explore_tab/subject_on_exams/view_model/subject_on_exam_cubit.dart';
 
 import '../../../../../../core/resuable-comp/app_bar.dart';
-import '../../start_screen/start_exam_screen.dart';
+ import '../../start_exam_screen/start_exam_screen.dart';
 import '../../view/widgets/exam_widget.dart';
 
 class SubjectOnExamsScreen extends StatelessWidget {

@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
  import 'package:online_exam/presentation/auth/forget_password/forget_password/view/forget_screen_view.dart';
  import 'package:online_exam/presentation/auth/login/view/login_screen.dart';
 import 'package:online_exam/presentation/auth/signUp/view/signup_screen.dart';
+import 'package:online_exam/presentation/home/tabs/explore_tab/quiz_screen/view/quiz_screen.dart';
 import 'package:online_exam/presentation/home/view/homeSceen.dart';
 
 import 'config/theme/app_theme.dart';
@@ -38,6 +39,7 @@ class MyApp extends StatelessWidget {
           },
           initialRoute:  RouteManager.homeScreen ,
           theme:AppTheme.lightTheme ,
+
 
 
         );
