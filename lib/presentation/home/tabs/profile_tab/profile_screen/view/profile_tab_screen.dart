@@ -113,6 +113,7 @@ class _ProfileTabScreenState extends State<ProfileTabScreen> {
       print("Error fetching profile data");
     }
   }
+
   void _showImagePicker(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -132,7 +133,8 @@ class _ProfileTabScreenState extends State<ProfileTabScreen> {
               const SizedBox(height: 20),
               ListTile(
                 leading: const Icon(Icons.camera, size: 30),
-                title: const Text("Take a photo", style: TextStyle(fontSize: 16)),
+                title:
+                    const Text("Take a photo", style: TextStyle(fontSize: 16)),
                 onTap: () {
                   Navigator.pop(context);
                   imageProvider.pickImage(ImageSource.camera);
@@ -141,7 +143,8 @@ class _ProfileTabScreenState extends State<ProfileTabScreen> {
               const Divider(),
               ListTile(
                 leading: const Icon(Icons.photo_library, size: 30),
-                title: const Text("Choose from gallery", style: TextStyle(fontSize: 16)),
+                title: const Text("Choose from gallery",
+                    style: TextStyle(fontSize: 16)),
                 onTap: () {
                   Navigator.pop(context);
                   imageProvider.pickImage(ImageSource.gallery);
@@ -186,7 +189,8 @@ class _ProfileTabScreenState extends State<ProfileTabScreen> {
                               ? FileImage(imageProvider.selectedImage!)
                               : null,
                           child: imageProvider.selectedImage == null
-                              ? const Icon(Icons.person, size: 50, color: ColorManager.labelLarge)
+                              ? const Icon(Icons.person,
+                                  size: 50, color: ColorManager.labelLarge)
                               : null,
                         ),
                         Positioned(
@@ -197,7 +201,9 @@ class _ProfileTabScreenState extends State<ProfileTabScreen> {
                             child: const CircleAvatar(
                               radius: 20,
                               backgroundColor: ColorManager.primaryColor,
-                              child: Icon(Icons.camera_alt, size: 22, color: ColorManager.backgroundBottomNavBar),
+                              child: Icon(Icons.camera_alt,
+                                  size: 22,
+                                  color: ColorManager.backgroundBottomNavBar),
                             ),
                           ),
                         ),
@@ -280,6 +286,8 @@ class _ProfileTabScreenState extends State<ProfileTabScreen> {
                   CustomTextButton(
                     text: StringManager.update,
                     onPressed: _navigateToEditProfile,
+                    color: ColorManager.primaryColor,
+                    textColor: ColorManager.backgroundBottomNavBar,
                   ),
                 ],
               ),

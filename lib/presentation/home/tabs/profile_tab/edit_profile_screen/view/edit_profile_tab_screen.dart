@@ -101,7 +101,7 @@ class _EditProfileTabScreenState extends State<EditProfileTabScreen> {
     }
   }
 
-    void _showImagePicker(BuildContext context) {
+  void _showImagePicker(BuildContext context) {
     showModalBottomSheet(
       context: context,
       shape: const RoundedRectangleBorder(
@@ -120,7 +120,8 @@ class _EditProfileTabScreenState extends State<EditProfileTabScreen> {
               const SizedBox(height: 20),
               ListTile(
                 leading: const Icon(Icons.camera, size: 30),
-                title: const Text("Take a photo", style: TextStyle(fontSize: 16)),
+                title:
+                    const Text("Take a photo", style: TextStyle(fontSize: 16)),
                 onTap: () {
                   Navigator.pop(context);
                   imageProvider.pickImage(ImageSource.camera);
@@ -129,7 +130,8 @@ class _EditProfileTabScreenState extends State<EditProfileTabScreen> {
               const Divider(),
               ListTile(
                 leading: const Icon(Icons.photo_library, size: 30),
-                title: const Text("Choose from gallery", style: TextStyle(fontSize: 16)),
+                title: const Text("Choose from gallery",
+                    style: TextStyle(fontSize: 16)),
                 onTap: () {
                   Navigator.pop(context);
                   imageProvider.pickImage(ImageSource.gallery);
@@ -156,7 +158,7 @@ class _EditProfileTabScreenState extends State<EditProfileTabScreen> {
                 children: [
                   AppBarWidget(
                     onpressed: () {
-                     Navigator.pop(context,true);
+                      Navigator.pop(context, true);
                     },
                     title: 'Edit profile',
                   ),
@@ -171,7 +173,8 @@ class _EditProfileTabScreenState extends State<EditProfileTabScreen> {
                               ? FileImage(imageProvider.selectedImage!)
                               : null,
                           child: imageProvider.selectedImage == null
-                              ? const Icon(Icons.person, size: 50, color: ColorManager.labelLarge)
+                              ? const Icon(Icons.person,
+                                  size: 50, color: ColorManager.labelLarge)
                               : null,
                         ),
                         Positioned(
@@ -182,7 +185,9 @@ class _EditProfileTabScreenState extends State<EditProfileTabScreen> {
                             child: const CircleAvatar(
                               radius: 20,
                               backgroundColor: ColorManager.primaryColor,
-                              child: Icon(Icons.camera_alt, size: 22, color: ColorManager.backgroundBottomNavBar),
+                              child: Icon(Icons.camera_alt,
+                                  size: 22,
+                                  color: ColorManager.backgroundBottomNavBar),
                             ),
                           ),
                         ),
@@ -331,6 +336,8 @@ class _EditProfileTabScreenState extends State<EditProfileTabScreen> {
                           }
                         },
                         text: 'Update',
+                        color: ColorManager.primaryColor,
+                        textColor: ColorManager.backgroundBottomNavBar,
                       );
                     },
                   )

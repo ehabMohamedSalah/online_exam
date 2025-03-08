@@ -32,7 +32,6 @@ class Signupscreen extends StatelessWidget {
     return BlocProvider(
       create: (BuildContext context) => getIt<SignupViewModelCubit>(),
       child: Scaffold(
-
         body: Padding(
           padding: const EdgeInsets.all(25),
           child: Form(
@@ -40,13 +39,11 @@ class Signupscreen extends StatelessWidget {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-
                   AppBarWidget(
                     onpressed: () {
                       Navigator.pop(context);
                     },
-
-                    title:"signUp",
+                    title: "signUp",
                   ),
                   SizedBox(
                     height: 50.h,
@@ -219,6 +216,8 @@ class Signupscreen extends StatelessWidget {
                             print("please enter a correct data");
                           }
                         },
+                        color: ColorManager.primaryColor,
+                        textColor: ColorManager.backgroundBottomNavBar,
                       );
                     },
                   ),
@@ -242,8 +241,8 @@ class Signupscreen extends StatelessWidget {
                             'Login',
                             style: TextStyle(
                               decoration: TextDecoration.underline,
-                              decorationColor: ColorManager
-                                  .primaryColor, // Optional: Change underline color
+                              decorationColor: ColorManager.primaryColor,
+                              // Optional: Change underline color
                               decorationThickness: 1.0,
                               color: ColorManager.primaryColor,
                               fontSize: 15,
