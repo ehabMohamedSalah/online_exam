@@ -14,4 +14,6 @@ class EndPoint {
   static const String changePasswordEndpoint = "api/v1/auth/changePassword";
   static const String profileInfoEndpoint = "api/v1/auth/profileData";
   static const String editProfileEndpoint = "api/v1/auth/editProfile";
+
+  static const String checkQuestionEndpoint = "api/v1/questions/check";
 }

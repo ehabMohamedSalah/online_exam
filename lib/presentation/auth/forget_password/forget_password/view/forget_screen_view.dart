@@ -46,7 +46,8 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
               AppBarWidget(
                 onpressed: () {
                   Navigator.pushNamed(context, RouteManager.loginScreen);
-                }, title: StringManager.password,
+                },
+                title: StringManager.password,
               ),
               SizedBox(
                 height: 40.h,
@@ -87,51 +88,54 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
               SizedBox(
                 height: 48.h,
               ),
-              BlocConsumer<ForgetPasswordViewModelCubit,ForgetPasswordViewModelState>(
-                listener: (context, state) {
-                  switch (state.runtimeType) {
-                    case ForgetPasswordSuccess:
-                      Fluttertoast.showToast(
-                        msg: "✅ otp send to your email!",
-                        toastLength: Toast.LENGTH_SHORT,
-                        gravity: ToastGravity.CENTER,
-                        backgroundColor: Colors.green,
-                        textColor: Colors.white,
-                      );
+              BlocConsumer<ForgetPasswordViewModelCubit,
+                  ForgetPasswordViewModelState>(listener: (context, state) {
+                switch (state.runtimeType) {
+                  case ForgetPasswordSuccess:
+                    Fluttertoast.showToast(
+                      msg: "✅ otp send to your email!",
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.CENTER,
+                      backgroundColor: Colors.green,
+                      textColor: Colors.white,
+                    );
 
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => OtpScreen( emailContrller.text),
-                        ),
-                      );
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => OtpScreen(emailContrller.text),
+                      ),
+                    );
 
-                      break;
-                    case ForgetPasswordErorr:
-                      String errorMessage =(state as ForgetPasswordErorr).exp.exception.toString();
-                      Fluttertoast.showToast(
-                        msg: errorMessage,
-                        toastLength: Toast.LENGTH_SHORT,
-                        gravity: ToastGravity.CENTER,
-                        backgroundColor: Colors.red,
-                        textColor: Colors.white,
-                      );
-                      break;
-                  }
-                },
-                builder: (context, state) {
-                        switch (state) {
-                            case ForgetPasswordloading:
-                            return CircularProgressIndicator();
-                            default:
-                                return CustomTextButton(
-                                      onPressed: () {
-                                     ForgetPasswordViewModelCubit.get(context).ForgetPassword(email:emailContrller.text);
-                                      },
-                                      text: 'Continue',
-                                );
-
-                        }})
+                    break;
+                  case ForgetPasswordErorr:
+                    String errorMessage =
+                        (state as ForgetPasswordErorr).exp.exception.toString();
+                    Fluttertoast.showToast(
+                      msg: errorMessage,
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.CENTER,
+                      backgroundColor: Colors.red,
+                      textColor: Colors.white,
+                    );
+                    break;
+                }
+              }, builder: (context, state) {
+                switch (state) {
+                  case ForgetPasswordloading:
+                    return CircularProgressIndicator();
+                  default:
+                    return CustomTextButton(
+                      onPressed: () {
+                        ForgetPasswordViewModelCubit.get(context)
+                            .ForgetPassword(email: emailContrller.text);
+                      },
+                      text: 'Continue',
+                      color: ColorManager.primaryColor,
+                      textColor: ColorManager.backgroundBottomNavBar,
+                    );
+                }
+              })
             ],
           ),
         ),

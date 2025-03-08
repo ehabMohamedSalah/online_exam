@@ -7,5 +7,6 @@ class RouteManager {
   static const String emailScreen = "/EMAILSCREEN";
   static const String changePassScreen = "/CHANGEPASSWORD";
   static const String profileTabScreen = "/PROFILETABSCREEN";
+  static const String examScorescreen = "/EXAMSCORESCREEN";
 
 }

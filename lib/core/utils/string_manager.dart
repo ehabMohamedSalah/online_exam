@@ -39,5 +39,12 @@ class StringManager {
   static const String art = "Art";
   static const String science = "Science";
 
+  static const String examScore = "Exam score";
+  static const String yourScore = "Your score";
+  static const String correct = "Correct";
+  static const String inCorrect = "Incorrect";
+  static const String showResults = "Show results";
+  static const String startAgain = "Start again";
+
 
 }
