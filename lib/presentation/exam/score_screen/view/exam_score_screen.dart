@@ -12,9 +12,8 @@ import 'package:online_exam/presentation/exam/score_screen/view_model/score_view
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
 class ExamScoreScreen extends StatefulWidget {
-  final String qId;
 
-  ExamScoreScreen({super.key, required this.qId});
+  ExamScoreScreen({super.key, required Map<String, dynamic> quizData, });
 
   @override
   State<ExamScoreScreen> createState() => _ExamScoreScreenState();
