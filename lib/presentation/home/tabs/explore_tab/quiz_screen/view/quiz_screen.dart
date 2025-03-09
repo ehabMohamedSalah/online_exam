@@ -186,43 +186,31 @@ class _QuizScreenState extends State<QuizScreen> {
                           ontap: currentIndex == questions.length - 1
                               ? () {
                                   // تجهيز قائمة تحتوي على جميع الإجابات لكل الأسئلة كـ List<Map<String, dynamic>>
-                                  List<Map<String, dynamic>> answersList = [];
+
+                                  List<Map<String, String>> answersList = [];
 
                                   for (int i = 0; i < questions.length; i++) {
                                     if (selectedAnswers[i].isNotEmpty) {
-                                      // إضافة بيانات السؤال إلى القائمة كـ Map
                                       answersList.add({
-                                        "questionId":
-                                            questions[i].id, // ✅ رقم السؤال
+                                        "questionId": questions[i].id ?? "", // ✅ تأمين القيمة
                                         "correct": selectedAnswers[i]
-                                            .map((index) => questions[i]
-                                                .answers?[index]
-                                                .key)
-                                            .toList(), // ✅ جميع الأجوبة المختارة لهذا السؤال
+                                            .map((index) => questions[i].answers?[index].key ?? "")
+                                            .join(","), // ✅ تحويل القائمة إلى String مفصول بفاصلة
                                       });
-
                                     }
                                   }
-                                  print(answersList);
-                                  Map<String, dynamic> quizData = {
-                                    "answers": answersList, // ✅ قائمة تحتوي على جميع الإجابات كـ List<Map<String, dynamic>>
-                                    "time": (questions.first.exam?.duration ?? 0) * 60 - totalSeconds,
-                                  };
 
-                                  print(
-                                      "✅ Sending quizData: $quizData"); // ✅ اختبار صحة البيانات قبل الإرسال
-
-                                  // الانتقال مع تمرير البيانات
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => ExamScoreScreen(
-                                        quizData:
-                                            quizData, // ✅ تمرير البيانات إلى الشاشة التالية
+                                        answers: answersList.cast<Map<String, String>>(), // ✅ تحويل البيانات للنمط الصحيح
+                                        time: (questions.first.exam?.duration ?? 0) * 60 - totalSeconds, // ✅ تمرير الوقت بشكل منفصل
                                       ),
                                     ),
                                   );
-                                }
+
+                          }
                               : () => setState(() => currentIndex++),
                           text: Text(
                             currentIndex == questions.length - 1

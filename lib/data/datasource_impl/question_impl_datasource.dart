@@ -16,16 +16,22 @@ class QuestionDatasourceImpl extends QuestionDatasource {
 
   @override
   Future<ApiResult<CheckQuestionResponseEntity>> postCheckQuestion({
-    required num correct,
-    required num wrong,
-    required String total,
+    required List<Map<String, String>> answers,
+    required int time,
   }) async {
+    final Map<String, dynamic> body = {
+      "answers": answers,
+      "time": time,
+    };
     try {
       var response = await apiManager.postRequest(
         endpoint: EndPoint.checkQuestionEndpoint,
         headers: {
           "token": StringManager.token,
-        });
+        },
+        body: body ,
+        );
+
 
       CheckQuestionResponse checkQuestionResponse = response.data != null
           ? CheckQuestionResponse.fromJson(response.data)

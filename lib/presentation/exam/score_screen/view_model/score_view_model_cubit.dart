@@ -11,15 +11,14 @@ class ScoreViewModelCubit extends Cubit<ScoreViewModelState> {
   ScoreViewModelCubit(this.checkQuestionUsecase)
       : super(ScoreViewModelInitial());
 
-  Future<void> postCheckQuestion({
-    required num correct,
-    required num wrong,
-    required String total,
+   postCheckQuestion({
+    required List<Map<String, String>> answers,
+    required int time,
   }) async {
     emit(Scoreloading());
-    print("🚀 Sending request with: correct=$correct, wrong=$wrong, total=$total");
 
-    var response = await checkQuestionUsecase.call(correct: correct, wrong: wrong, total: total);
+
+    var response = await checkQuestionUsecase.call(answers: answers, time: time);
 
     if (response is SuccessApiResult<CheckQuestionResponseEntity>) {
       print("✅ Success: ${response.data?.message}");

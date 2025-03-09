@@ -12,12 +12,10 @@ class QuestionRepoImpl extends QuestionRepo {
 
   @override
   Future<ApiResult<CheckQuestionResponseEntity>> postCheckQuestion({
-    required num correct,
-    required num wrong,
-    required String total,
-  }) {
-    return apiDatasource.postCheckQuestion(
-        correct: correct, wrong: wrong, total: total);
+  required List<Map<String, String>> answers,
+  required int time,
+}) {
+    return apiDatasource.postCheckQuestion(answers: answers, time: time);
   }
 
 }

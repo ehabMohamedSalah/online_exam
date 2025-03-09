@@ -10,11 +10,9 @@ class CheckQuestionUsecase {
   CheckQuestionUsecase(this.questionRepo);
 
   Future<ApiResult<CheckQuestionResponseEntity>> call({
-    required num correct,
-    required num wrong,
-    required String total,
+    required List<Map<String, String>> answers,
+    required int time,
   }) {
-    return questionRepo.postCheckQuestion(
-        correct: correct, wrong: wrong, total: total);
+    return questionRepo.postCheckQuestion(answers: answers, time: time);
   }
 }

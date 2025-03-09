@@ -3,8 +3,7 @@ import 'package:online_exam/domain/entity/exam/check_question/check_question_res
 
 abstract class QuestionRepo {
   Future<ApiResult<CheckQuestionResponseEntity>> postCheckQuestion({
-    required num correct,
-    required num wrong,
-    required String total,
+    required List<Map<String, String>> answers,
+    required int time,
   });
 }
