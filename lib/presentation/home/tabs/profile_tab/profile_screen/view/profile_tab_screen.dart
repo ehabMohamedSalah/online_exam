@@ -287,7 +287,7 @@ class _ProfileTabScreenState extends State<ProfileTabScreen> {
                     text: StringManager.update,
                     onPressed: _navigateToEditProfile,
                     color: ColorManager.primaryColor,
-                    textColor: ColorManager.backgroundBottomNavBar,
+                    textColor: Colors.white,
                   ),
                 ],
               ),

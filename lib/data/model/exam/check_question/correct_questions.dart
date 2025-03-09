@@ -1,34 +1,32 @@
 import 'package:online_exam/domain/entity/exam/check_question/correct_question_entity.dart';
 
-/// QID : "6700829e0a5849a4aee16297"
-/// Question : "Who is making the Web standards?"
-/// correctAnswer : "A4"
+/// QID : "670082800a5849a4aee16294"
+/// Question : "What does HTML stand for?"
+/// correctAnswer : "A2"
 /// answers : {}
 
 class CorrectQuestions {
   String? qid;
   String? question;
   String? correctAnswer;
-  Map<String, dynamic>? answers;
+  dynamic answers;
 
   CorrectQuestions({this.qid, this.question, this.correctAnswer, this.answers});
 
-  CorrectQuestions.fromJson(Map<String, dynamic> json) {
+  CorrectQuestions.fromJson(dynamic json) {
     qid = json['QID'];
     question = json['Question'];
     correctAnswer = json['correctAnswer'];
-    answers = json['answers'] != null
-        ? Map<String, dynamic>.from(json['answers'])
-        : {};
+    answers = json['answers'];
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'QID': qid,
-      'Question': question,
-      'correctAnswer': correctAnswer,
-      'answers': answers ?? {},
-    };
+    final map = <String, dynamic>{};
+    map['QID'] = qid;
+    map['Question'] = question;
+    map['correctAnswer'] = correctAnswer;
+    map['answers'] = answers;
+    return map;
   }
 
   CorrectQuestionsEntity toCorrectQuestionsEntity() {

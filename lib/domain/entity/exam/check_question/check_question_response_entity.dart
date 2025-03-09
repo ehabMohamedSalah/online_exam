@@ -1,4 +1,5 @@
 import 'package:online_exam/domain/entity/exam/check_question/correct_question_entity.dart';
+import 'package:online_exam/domain/entity/exam/check_question/wrong_question_entity.dart';
 
 /// message : "success"
 /// correct : 2
@@ -12,7 +13,7 @@ class CheckQuestionResponseEntity {
   num? correct;
   num? wrong;
   String? total;
-  List<dynamic>? wrongQuestions;
+  List<WrongQuestionsEntity>? wrongQuestions;
   List<CorrectQuestionsEntity>? correctQuestions;
 
   CheckQuestionResponseEntity({

@@ -25,13 +25,7 @@ class QuestionDatasourceImpl extends QuestionDatasource {
         endpoint: EndPoint.checkQuestionEndpoint,
         headers: {
           "token": StringManager.token,
-        },
-        body: {
-          "correct": correct,
-          "wrong": wrong,
-          "total": total,
-        },
-      );
+        });
 
       CheckQuestionResponse checkQuestionResponse = response.data != null
           ? CheckQuestionResponse.fromJson(response.data)
