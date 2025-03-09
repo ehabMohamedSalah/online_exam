@@ -7,6 +7,7 @@ import 'package:online_exam/domain/entity/profile_tab/profile_entry/profile_resp
 import 'package:online_exam/domain/usecase/profile_usecase/profile_info_usecase.dart';
 
 part 'profile_screen_view_model_state.dart';
+@injectable
 
 class ProfileScreenViewModelCubit extends Cubit<ProfileScreenViewModelState> {
   ProfileInfoUsecase getProfileInfoUsecase;

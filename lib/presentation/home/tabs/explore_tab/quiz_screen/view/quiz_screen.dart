@@ -204,6 +204,7 @@ class _QuizScreenState extends State<QuizScreen> {
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => ExamScoreScreen(
+                                        examID: widget.examID,
                                         answers: answersList.cast<Map<String, String>>(), // ✅ تحويل البيانات للنمط الصحيح
                                         time: (questions.first.exam?.duration ?? 0) * 60 - totalSeconds, // ✅ تمرير الوقت بشكل منفصل
                                       ),

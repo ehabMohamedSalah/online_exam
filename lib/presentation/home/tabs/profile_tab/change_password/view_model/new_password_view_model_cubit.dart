@@ -7,6 +7,7 @@ import 'package:online_exam/domain/entity/profile_tab/change_password_entry/chan
 import 'package:online_exam/domain/usecase/profile_usecase/change_password_usecase.dart';
 
 part 'new_password_view_model_state.dart';
+@injectable
 
 class NewPasswordViewModelCubit extends Cubit<NewPasswordViewModelState> {
   ChangePasswordUsecase changePasswordUsecase;
