@@ -10,25 +10,26 @@ import 'package:provider/provider.dart';
 import 'config/theme/app_theme.dart';
 import 'core/api/api_manager.dart';
 import 'core/di/di.dart';
+import 'core/local_storage/exam_result_storage.dart';
 import 'core/utils/routes_manager.dart';
-
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized(); // ضروري لاستخدام SharedPreferences
   configureDependencies();
   ApiManager.init();
-  runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (context) => ImageProviderModel()),
-      ],
-      child: MyApp(),
-    ),
-  );
+
+  // 🔹 تحقق من وجود التوكن
+  String? token = await ExamResultsStorage.getUserToken();
+  String initialRoute = token != null && token.isNotEmpty
+      ? RouteManager.homeScreen
+      : RouteManager.loginScreen;
+
+  runApp(MyApp(initialRoute));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final String initialRoute;
+  const MyApp(this.initialRoute, {super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
@@ -44,7 +45,7 @@ class MyApp extends StatelessWidget {
             RouteManager.forgetPassScreen: (context) => ForgetPasswordScreen(),
             RouteManager.signUpscreen: (context) => Signupscreen(),
           },
-          initialRoute: RouteManager.homeScreen,
+          initialRoute: initialRoute, // ✅ تم التحقق من التوكن
           theme: AppTheme.lightTheme,
         );
       },

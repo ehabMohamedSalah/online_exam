@@ -8,11 +8,14 @@ import 'package:online_exam/presentation/home/tabs/explore_tab/quiz_screen/view/
 import 'package:online_exam/presentation/home/tabs/explore_tab/quiz_screen/view/widget/helper_func/format_func.dart';
 import 'package:online_exam/presentation/home/tabs/explore_tab/quiz_screen/view_model/question0nexam_cubit.dart';
 import '../../../../../../core/di/di.dart';
+import '../../../../../../data/model/get_all_exam_onsubject_response/Exams.dart';
+import '../../../../../../data/model/question_on_exam/Exam.dart';
 import '../../../../../exam/score_screen/view/exam_score_screen.dart';
 
 class QuizScreen extends StatefulWidget {
   final String examID;
-  const QuizScreen(this.examID, {Key? key}) : super(key: key);
+  Exams exam;
+    QuizScreen(this.examID,this.exam, {Key? key}) : super(key: key);
 
   @override
   _QuizScreenState createState() => _QuizScreenState();
@@ -204,6 +207,8 @@ class _QuizScreenState extends State<QuizScreen> {
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => ExamScoreScreen(
+                                        questions: state.response.data?.questions??[],
+                                        exam: widget.exam,
                                         examID: widget.examID,
                                         answers: answersList.cast<Map<String, String>>(), // ✅ تحويل البيانات للنمط الصحيح
                                         time: (questions.first.exam?.duration ?? 0) * 60 - totalSeconds, // ✅ تمرير الوقت بشكل منفصل

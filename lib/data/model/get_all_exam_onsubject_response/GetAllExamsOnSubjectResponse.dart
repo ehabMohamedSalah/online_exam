@@ -53,12 +53,4 @@ GetAllExamsOnSubjectResponse copyWith({  String? message,
     return map;
   }
 
-  GetAllExamsOnSubjectEntity toGetAllExamsOnSubjectResponse(){
-    return GetAllExamsOnSubjectEntity(
-       message: message,
-      code: code,
-       exams:exams?.map((exam) => exam.toExamsEntity()).toList(),
-
-    );
-  }
-}
+ }

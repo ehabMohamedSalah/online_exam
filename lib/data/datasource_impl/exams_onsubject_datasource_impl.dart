@@ -15,7 +15,7 @@ class ExamsOnSubjectsDatasourceImpl extends ExamsOnSubjectsDatasource{
   ApiManager apiManager;
   ExamsOnSubjectsDatasourceImpl(this.apiManager);
   @override
-  Future<ApiResult<GetAllExamsOnSubjectEntity>> GetExamsOnSubjects({required String subjectID}) async{
+  Future<ApiResult<GetAllExamsOnSubjectResponse>> GetExamsOnSubjects({required String subjectID}) async{
     try {
       var response = await apiManager.getRequest(
         Endpoint: EndPoint.ExamsOnSubjectEndpoint(subjectID),
@@ -25,8 +25,8 @@ class ExamsOnSubjectsDatasourceImpl extends ExamsOnSubjectsDatasource{
       );
 
       GetAllExamsOnSubjectResponse allExamModel = GetAllExamsOnSubjectResponse.fromJson(response.data);
-      GetAllExamsOnSubjectEntity AllExamsEntity = allExamModel
-          .toGetAllExamsOnSubjectResponse();
+      GetAllExamsOnSubjectResponse AllExamsEntity = allExamModel;
+
 
       // Ensure proper error handling
       if (AllExamsEntity.code != null) {

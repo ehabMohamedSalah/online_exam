@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:online_exam/core/di/di.dart';
+import 'package:online_exam/core/local_storage/exam_result_storage.dart';
 import 'package:online_exam/core/resuable-comp/app_bar.dart';
 import 'package:online_exam/core/resuable-comp/text_button.dart';
 import 'package:online_exam/core/utils/colors_manager.dart';
@@ -11,14 +12,19 @@ import 'package:online_exam/presentation/exam/score_screen/view_model/score_view
 import 'package:online_exam/presentation/home/view/homeSceen.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
+import '../../../../data/model/get_all_exam_onsubject_response/Exams.dart';
+import '../../../../data/model/question_on_exam/Questions.dart';
+import '../../../../data/model/result_model/result_model_response.dart';
 import '../../../home/tabs/explore_tab/quiz_screen/view/quiz_screen.dart';
 
 class ExamScoreScreen extends StatelessWidget {
   final List<Map<String, String>> answers;
   final int time;
   String examID;
+  Exams exam;
+  List<Questions> questions;
 
-  ExamScoreScreen({required this.answers, required this.time,required this.examID});
+  ExamScoreScreen({required this.answers, required this.time,required this.examID,required this.exam,required this.questions});
 
   @override
   Widget build(BuildContext context) {
@@ -49,6 +55,21 @@ class ExamScoreScreen extends StatelessWidget {
                   if (state is Scoreloading) {
                     return Center(child: CircularProgressIndicator());
                   } else if (state is ScoreSuccess) {
+                    print(questions.length);
+                    final examResult = ExamResultModel(
+                      questions: questions,
+                      exam: exam,
+                      examID: examID, // استخدم examID من الشاشة
+                      answers:answers ,
+                      totalScore: (state.response.data?.total) ,
+                      correctAnswers: "${state.response.data?.correct ?? 0}",
+                      incorrectAnswers:" ${state.response.data?.wrong ?? 0}",
+                      timeTaken: "${time}",
+                    );
+
+                    // ✅ تخزين النتيجة في `SharedPreferences`
+                    ExamResultsStorage.addOrUpdateResult(examResult);
+
                     return Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -56,7 +77,7 @@ class ExamScoreScreen extends StatelessWidget {
                           radius: 80,
                           lineWidth: 6,
                           center: Text(
-                              "${state.response.data?.total.toString().substring(0, 5) ?? "0.00"}%",
+                            "${state.response.data?.total.toString().substring(0, 5) ?? "0.00"}%",
                             style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                           ),
                           progressColor: ColorManager.primaryColor,
@@ -89,6 +110,7 @@ class ExamScoreScreen extends StatelessWidget {
                 },
               ),
 
+
               SizedBox(height: 80.h),
               CustomTextButton(
                 onPressed: () {
@@ -101,7 +123,7 @@ class ExamScoreScreen extends StatelessWidget {
               SizedBox(height: 24.h),
               CustomTextButton(
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => QuizScreen(examID)));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => QuizScreen(examID,exam)));
                 },
                 text: StringManager.startAgain,
                 color: Colors.white,

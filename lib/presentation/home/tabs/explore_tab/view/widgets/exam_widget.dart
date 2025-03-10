@@ -1,11 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:online_exam/data/model/get_all_exam_onsubject_response/Exams.dart';
 
 import '../../../../../../domain/entity/get_all_exam_on_Subject_entity_response/exams_entity.dart';
 
 class ExamWidget extends StatelessWidget {
-  ExamsEntity examItem;
+  Exams examItem;
   ExamWidget(this.examItem);
   @override
   Widget build(BuildContext context) {

@@ -4,12 +4,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:online_exam/core/resuable-comp/custom_text_field.dart';
 import 'package:online_exam/core/resuable-comp/text_button.dart';
 import 'package:online_exam/core/utils/colors_manager.dart';
+import 'package:online_exam/data/model/question_on_exam/Exam.dart';
 
+import '../../../../../data/model/get_all_exam_onsubject_response/Exams.dart';
 import '../../../../../domain/entity/get_all_exam_on_Subject_entity_response/exams_entity.dart';
 import '../quiz_screen/view/quiz_screen.dart';
 
 class StartExamScreen extends StatelessWidget {
-  ExamsEntity exam;
+  Exams exam;
   StartExamScreen(this.exam);
   @override
   Widget build(BuildContext context) {
@@ -89,7 +91,7 @@ class StartExamScreen extends StatelessWidget {
                 color: ColorManager.primaryColor,
                 onPressed: (){
 
-              Navigator.push(context, MaterialPageRoute(builder: (context) => QuizScreen(exam.id??"")));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => QuizScreen(exam.id??"",exam )));
               print(exam.id??"mfesh id le al exam asln fe al start exam screen");
             }, text: "Start"),
           ],

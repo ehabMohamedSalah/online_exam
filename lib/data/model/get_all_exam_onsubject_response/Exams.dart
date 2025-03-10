@@ -60,17 +60,7 @@ Exams copyWith({  String? id,
     map['createdAt'] = createdAt;
     return map;
   }
-  ExamsEntity toExamsEntity(){
-    return ExamsEntity(
-      createdAt: createdAt,
-      id: id,
-      title: title,
-      active: active,
-      duration: duration,
-      numberOfQuestions: numberOfQuestions,
-      subject: subject,
-    );
-  }
+
 
 
 }

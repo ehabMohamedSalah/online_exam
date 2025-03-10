@@ -6,7 +6,7 @@ sealed class SubjectOnExamState {}
 final class SubjectOnExamInitial extends SubjectOnExamState {}
 class SubjectOnExamLoadingState extends SubjectOnExamState{}
 class SubjectOnExamSuccessState extends SubjectOnExamState{
-  SuccessApiResult<GetAllExamsOnSubjectEntity> response;
+  SuccessApiResult<GetAllExamsOnSubjectResponse> response;
   SubjectOnExamSuccessState(this.response);
 }
 class SubjectOnExamErrorState extends SubjectOnExamState{

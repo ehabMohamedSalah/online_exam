@@ -1,3 +1,4 @@
+import '../get_all_exam_onsubject_response/Exams.dart';
 import 'Answers.dart';
 import 'Subject.dart';
 import 'Exam.dart';
@@ -34,7 +35,7 @@ class Questions {
     question = json['question'];
     correct = json['correct'];
     subject = json['subject'] != null ? Subject.fromJson(json['subject']) : null;
-    exam = json['exam'] != null ? Exam.fromJson(json['exam']) : null;
+    exam = json['exam'] != null ? Exams.fromJson(json['exam']) : null;
     createdAt = json['createdAt'];
   }
   List<Answers>? answers;
@@ -43,7 +44,7 @@ class Questions {
   String? question;
   String? correct;
   Subject? subject;
-  Exam? exam;
+  Exams? exam;
   String? createdAt;
 Questions copyWith({  List<Answers>? answers,
   String? type,
@@ -51,7 +52,7 @@ Questions copyWith({  List<Answers>? answers,
   String? question,
   String? correct,
   Subject? subject,
-  Exam? exam,
+  Exams? exam,
   String? createdAt,
 }) => Questions(  answers: answers ?? this.answers,
   type: type ?? this.type,

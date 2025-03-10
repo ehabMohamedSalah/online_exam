@@ -157,20 +157,23 @@ class _LoginScreenState extends State<LoginScreen> {
                       }
 
                       return CustomTextButton(
-                          text: StringManager.login,
-                          color: ColorManager.primaryColor,
-                          textColor: ColorManager.backgroundBottomNavBar,
-                          onPressed: () {
-                            if (formKey.currentState?.validate() == true) {
-                              // ✅ if data is correct
-                              LoginViewModelCubit.get(context).login(
-                                  password: passwordController.text,
-                                  email: emailContrller.text);
-                            } else {
-                              // ❌  law fshlt
-                              print("please enter a correct data");
-                            }
-                          });
+                        text: StringManager.login,
+                        color: ColorManager.primaryColor,
+                        textColor: ColorManager.backgroundBottomNavBar,
+                        onPressed: () {
+                          if (formKey.currentState?.validate() == true) {
+                            // ✅ إذا كانت البيانات صحيحة
+                            LoginViewModelCubit.get(context).login(
+                              password: passwordController.text,
+                              email: emailContrller.text, // ✅ تصحيح الاسم
+                            );
+                          } else {
+                            // ❌ إذا فشل التحقق من البيانات
+                            print("❌ Please enter correct data");
+                          }
+                        },
+                      );
+
                     },
                   ),
                   SizedBox(

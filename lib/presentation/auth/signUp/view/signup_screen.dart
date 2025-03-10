@@ -181,7 +181,7 @@ class Signupscreen extends StatelessWidget {
                           fontSize: 16.0,
                         );
                         Navigator.pushNamedAndRemoveUntil(
-                            context, RouteManager.homeScreen, (route) => false);
+                            context, RouteManager.loginScreen, (route) => false);
                       }
                       if (state is SignupErorr) {
                         Fluttertoast.showToast(

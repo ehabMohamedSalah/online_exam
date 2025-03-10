@@ -5,6 +5,7 @@ import 'package:meta/meta.dart';
 import 'package:online_exam/domain/entity/get_all_exam_on_Subject_entity_response/get_all_exam_obSubject_entity.dart';
 
 import '../../../../../../core/api/api_result.dart';
+import '../../../../../../data/model/get_all_exam_onsubject_response/GetAllExamsOnSubjectResponse.dart';
 import '../../../../../../domain/usecase/exam_onsubject_usecase.dart';
 
 part 'subject_on_exam_state.dart';
@@ -24,10 +25,10 @@ class SubjectOnExamCubit extends Cubit<SubjectOnExamState> {
 
     var response = await examOnsubjectUsecase.call(subjectID:subjectID );
 
-    if (response is SuccessApiResult<GetAllExamsOnSubjectEntity>) {
+    if (response is SuccessApiResult<GetAllExamsOnSubjectResponse>) {
       print("✅ Success: ${response.data?.message}");
       emit(SubjectOnExamSuccessState(response));
-    } else if (response is ErrorApiResult<GetAllExamsOnSubjectEntity>) {
+    } else if (response is ErrorApiResult<GetAllExamsOnSubjectResponse>) {
       print("❌ Error: ${response.exception}");
       emit(SubjectOnExamErrorState(response));
     }

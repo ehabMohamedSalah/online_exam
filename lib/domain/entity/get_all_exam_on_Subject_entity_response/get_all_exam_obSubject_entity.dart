@@ -1,5 +1,6 @@
 
 
+import 'package:online_exam/data/model/get_all_exam_onsubject_response/Exams.dart';
 import 'package:online_exam/domain/entity/get_all_exam_on_Subject_entity_response/exams_entity.dart';
 
 import '../../../data/model/get-all-exams-model-response/Metadata.dart';
@@ -19,7 +20,7 @@ class GetAllExamsOnSubjectEntity {
    String? message;
   int? code;
   Metadata? metadata;
-  List<ExamsEntity>? exams;
+  List<Exams>? exams;
 
 
 }
