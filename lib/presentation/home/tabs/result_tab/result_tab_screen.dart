@@ -49,15 +49,22 @@ class ResultTabScreen extends StatelessWidget {
                         text: results[index].exam?.title??"", // ✅ عرض اسم الامتحان
                         image: "assets/images/Profit.png",
                         onTap: () {
+                          print(results[index].questions?[index].correct??[]);
+                          print(results[index].questions?[index].id??[]);
+
+                          print(results[index].answers?[index]??[]);
+
                           if (results[index].questions != null && results[index].questions!.isNotEmpty) {
-                          /*  Navigator.push(
+                            Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (context) => AnswerScreen(
+                                  questions: results[index].questions??[],
+                                  answersList: results[index].answers??[],
 
                                 ),
                               ),
-                            );*/
+                            );
                           }
                         },
 

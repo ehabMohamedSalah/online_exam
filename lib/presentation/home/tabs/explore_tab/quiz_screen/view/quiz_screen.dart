@@ -190,7 +190,7 @@ class _QuizScreenState extends State<QuizScreen> {
                               ? () {
                                   // تجهيز قائمة تحتوي على جميع الإجابات لكل الأسئلة كـ List<Map<String, dynamic>>
 
-                                  List<Map<String, String>> answersList = [];
+                                  List<Map<String , String>> answersList = [];
 
                                   for (int i = 0; i < questions.length; i++) {
                                     if (selectedAnswers[i].isNotEmpty) {

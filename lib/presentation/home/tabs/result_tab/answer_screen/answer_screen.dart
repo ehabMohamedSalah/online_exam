@@ -1,132 +1,113 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class AnswerScreen extends StatefulWidget {
-  final String question;
-  final List<String> options;
-  final String correctAnswer;
-  final String selectedOption;
+import '../../../../../data/model/question_on_exam/Questions.dart';
 
-  const AnswerScreen({
-    super.key,
-    required this.question,
-    required this.options,
-    required this.correctAnswer,
-    required this.selectedOption,
-  });
+class QuestionCubit extends Cubit<Map<String, String?>> {
+  QuestionCubit() : super({});
 
-  @override
-  State<AnswerScreen> createState() => _AnswerScreenState();
+  void checkAnswer(String questionId, String selectedAnswer) {
+    emit({...state, questionId: selectedAnswer});
+  }
 }
 
-class _AnswerScreenState extends State<AnswerScreen> {
+class AnswerScreen extends StatelessWidget {
+  final List<Questions> questions;
+  final List<Map<String, String>> answersList;
+
+  const AnswerScreen({Key? key, required this.questions, required this.answersList}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: Text(
-          "Answers",
-          style: GoogleFonts.merriweather(
-            fontSize: 22,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        backgroundColor: Colors.white,
-        leading: Padding(
-          padding: const EdgeInsets.only(left: 20),
-          child: GestureDetector(
-            child: Icon(Icons.arrow_back_ios),
-            onTap: () {
-              Navigator.pop(context);
-            },
-          ),
+    return BlocProvider(
+      create: (context) => QuestionCubit(),
+      child: Scaffold(
+        appBar: AppBar(title: Text("اختبار")),
+        body: ListView.builder(
+          itemCount: questions.length,
+          itemBuilder: (context, index) {
+            final question = questions[index];
+            final correctAnswer = _getCorrectAnswer(answersList, question.id!);
+
+            return QuestionItem(
+              question: question,
+              correctAnswer: correctAnswer,
+            );
+          },
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Material(
-          elevation: 5,
-          borderRadius: BorderRadius.circular(10),
-          child: Container(
-            height: 380,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: Colors.white70,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.white70,
-                  blurRadius: 0.5,
-                  offset: Offset(2, 4),
-                ),
-              ],
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(12),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    widget.question,
-                    style: GoogleFonts.merriweather(
-                      fontSize: 22,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: widget.options.length,
-                      itemBuilder: (context, index) {
-                        String option = widget.options[index];
-                        Color backColor = (Color(0XFFE9E9E9));
-                        Color bordColor = (Color(0XFFE9E9E9));
-                        bool isSelected = false;
+    );
+  }
 
-                        if (option == widget.selectedOption) {
-                          if (widget.selectedOption == widget.correctAnswer) {
-                            backColor = Colors.green;
-                            bordColor = Colors.green.shade100;
-                            isSelected = true;
-                          } else {
-                            backColor = Colors.red;
-                            bordColor = Colors.red.shade100;
-                            isSelected = true;
-                          }
+  String _getCorrectAnswer(List<Map<String, String>> answersList, String questionId) {
+    for (var map in answersList) {
+      if (map.containsKey(questionId)) {
+        return map[questionId] ?? "";
+      }
+    }
+    return "";
+  }
+}
+
+class QuestionItem extends StatelessWidget {
+  final Questions question;
+  final String correctAnswer;
+
+  const QuestionItem({Key? key, required this.question, required this.correctAnswer}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      margin: EdgeInsets.all(10),
+      child: Padding(
+        padding: EdgeInsets.all(10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              question.question ?? "",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 10),
+            BlocBuilder<QuestionCubit, Map<String, String?>>(
+              builder: (context, state) {
+                String? selectedAnswer = state[question.id];
+
+                return Column(
+                  children: question.answers!.map((answer) {
+                    bool isSelected = selectedAnswer == answer.key;
+                    bool isCorrect = answer.key == correctAnswer;
+                    bool isWrongSelected = isSelected && !isCorrect;
+
+                    return RadioListTile<String>(
+                      title: Text(
+                        answer.answer ?? "",
+                        style: TextStyle(
+                          color: isCorrect
+                              ? Colors.green
+                              : isWrongSelected
+                              ? Colors.red
+                              : Colors.black,
+                          fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                        ),
+                      ),
+                      value: answer.key ?? "",
+                      groupValue: selectedAnswer,
+                      onChanged: (value) {
+                        if (selectedAnswer == null) {
+                          context.read<QuestionCubit>().checkAnswer(question.id!, value!);
                         }
-
-                        return Container(
-                          margin: EdgeInsets.symmetric(vertical: 5),
-                          decoration: BoxDecoration(
-                            color: option == widget.correctAnswer ? Colors.green.shade100 : bordColor,
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(
-                              color: option == widget.correctAnswer ? Colors.green : backColor,
-                              width: 2,
-                            ),
-                          ),
-                          child: CheckboxListTile(
-                            title: Text(
-                              option,
-                              style: GoogleFonts.merriweather(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            value: isSelected,
-                            onChanged: null, // تعطيل الاختيار لأن المستخدم قام بالإجابة بالفعل
-                            checkColor: Colors.white,
-                            activeColor: backColor,
-                            controlAffinity: ListTileControlAffinity.leading,
-                          ),
-                        );
                       },
-                    ),
-                  ),
-                ],
-              ),
+                      activeColor: isCorrect ? Colors.green : Colors.red,
+                      tileColor: isSelected
+                          ? (isCorrect ? Colors.green.withOpacity(0.2) : Colors.red.withOpacity(0.2))
+                          : null,
+                    );
+                  }).toList(),
+                );
+              },
             ),
-          ),
+          ],
         ),
       ),
     );
