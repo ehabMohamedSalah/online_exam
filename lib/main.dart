@@ -1,3 +1,4 @@
+// main.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:online_exam/data/model/profile_tab/image_provider_model.dart';
@@ -12,23 +13,24 @@ import 'core/api/api_manager.dart';
 import 'core/di/di.dart';
 import 'core/local_storage/exam_result_storage.dart';
 import 'core/utils/routes_manager.dart';
+
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized(); // ضروري لاستخدام SharedPreferences
+  WidgetsFlutterBinding.ensureInitialized();
   configureDependencies();
   ApiManager.init();
 
-  // 🔹 تحقق من وجود التوكن
-  String? token = await ExamResultsStorage.getUserToken();
-  String initialRoute = token != null && token.isNotEmpty
-      ? RouteManager.homeScreen
-      : RouteManager.loginScreen;
-
-  runApp(MyApp(initialRoute));
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  final String initialRoute;
-  const MyApp(this.initialRoute, {super.key});
+  const MyApp({super.key});
+
+  Future<String> getInitialRoute() async {
+    String? token = await ExamResultsStorage.getUserToken();
+    return token != null && token.isNotEmpty
+        ? RouteManager.homeScreen
+        : RouteManager.loginScreen;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,16 +39,30 @@ class MyApp extends StatelessWidget {
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (context, child) {
-        return MaterialApp(
-          debugShowCheckedModeBanner: false,
-          routes: {
-            RouteManager.homeScreen: (context) => HomeScreen(),
-            RouteManager.loginScreen: (context) => LoginScreen(),
-            RouteManager.forgetPassScreen: (context) => ForgetPasswordScreen(),
-            RouteManager.signUpscreen: (context) => Signupscreen(),
+        return FutureBuilder<String>(
+          future: getInitialRoute(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return Center(child: CircularProgressIndicator());
+            }
+
+            return MultiProvider(
+              providers: [
+                ChangeNotifierProvider(create: (_) => ImageProviderModel()),
+              ],
+              child: MaterialApp(
+                debugShowCheckedModeBanner: false,
+                routes: {
+                  RouteManager.homeScreen: (context) => HomeScreen(),
+                  RouteManager.loginScreen: (context) => LoginScreen(),
+                  RouteManager.forgetPassScreen: (context) => ForgetPasswordScreen(),
+                  RouteManager.signUpscreen: (context) => Signupscreen(),
+                },
+                initialRoute: snapshot.data!,
+                theme: AppTheme.lightTheme,
+              ),
+            );
           },
-          initialRoute: initialRoute, // ✅ تم التحقق من التوكن
-          theme: AppTheme.lightTheme,
         );
       },
     );
