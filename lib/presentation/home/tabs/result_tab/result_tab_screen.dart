@@ -59,8 +59,8 @@ class ResultTabScreen extends StatelessWidget {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => AnswerScreen(
+                                  answersList:results[index].answers??[] ,
                                   questions: results[index].questions??[],
-                                  answersList: results[index].answers??[],
 
                                 ),
                               ),
