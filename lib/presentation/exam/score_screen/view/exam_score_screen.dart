@@ -9,6 +9,7 @@ import 'package:online_exam/core/utils/colors_manager.dart';
 import 'package:online_exam/core/utils/string_manager.dart';
 import 'package:online_exam/presentation/exam/score_screen/view/widget/score_reslt_widet.dart';
 import 'package:online_exam/presentation/exam/score_screen/view_model/score_view_model_cubit.dart';
+import 'package:online_exam/presentation/home/tabs/result_tab/answer_screen/answer_screen.dart';
 import 'package:online_exam/presentation/home/view/homeSceen.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
@@ -24,13 +25,18 @@ class ExamScoreScreen extends StatelessWidget {
   Exams exam;
   List<Questions> questions;
 
-  ExamScoreScreen({required this.answers, required this.time,required this.examID,required this.exam,required this.questions});
+  ExamScoreScreen(
+      {required this.answers,
+      required this.time,
+      required this.examID,
+      required this.exam,
+      required this.questions});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) =>
-      getIt<ScoreViewModelCubit>()..postCheckQuestion(answers: answers, time: time),
+      create: (context) => getIt<ScoreViewModelCubit>()
+        ..postCheckQuestion(answers: answers, time: time),
       child: Scaffold(
         body: Padding(
           padding: const EdgeInsets.all(20),
@@ -38,14 +44,17 @@ class ExamScoreScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               AppBarWidget(
-                onpressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen())),
-
+                onpressed: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => HomeScreen())),
                 title: StringManager.examScore,
               ),
               SizedBox(height: 40.h),
               Text(
                 StringManager.yourScore,
-                style: Theme.of(context).textTheme.labelLarge?.copyWith(color: Colors.black),
+                style: Theme.of(context)
+                    .textTheme
+                    .labelLarge
+                    ?.copyWith(color: Colors.black),
               ),
               SizedBox(height: 24.h),
 
@@ -59,11 +68,12 @@ class ExamScoreScreen extends StatelessWidget {
                     final examResult = ExamResultModel(
                       questions: questions,
                       exam: exam,
-                      examID: examID, // استخدم examID من الشاشة
-                      answers:answers ,
-                      totalScore: (state.response.data?.total) ,
+                      examID: examID,
+                      // استخدم examID من الشاشة
+                      answers: answers,
+                      totalScore: (state.response.data?.total),
                       correctAnswers: "${state.response.data?.correct ?? 0}",
-                      incorrectAnswers:" ${state.response.data?.wrong ?? 0}",
+                      incorrectAnswers: " ${state.response.data?.wrong ?? 0}",
                       timeTaken: "${time}",
                     );
 
@@ -78,7 +88,8 @@ class ExamScoreScreen extends StatelessWidget {
                           lineWidth: 6,
                           center: Text(
                             "${state.response.data?.total.toString().substring(0, 5) ?? "0.00"}%",
-                            style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                            style: const TextStyle(
+                                fontSize: 22, fontWeight: FontWeight.bold),
                           ),
                           progressColor: ColorManager.primaryColor,
                           backgroundColor: ColorManager.failureColor,
@@ -89,13 +100,15 @@ class ExamScoreScreen extends StatelessWidget {
                           children: [
                             ScoreResltWidet(
                               title: StringManager.correct,
-                              reslt: (state.response.data?.correct ?? 0).toStringAsFixed(0),
+                              reslt: (state.response.data?.correct ?? 0)
+                                  .toStringAsFixed(0),
                               color: ColorManager.primaryColor,
                             ),
                             SizedBox(height: 10.h),
                             ScoreResltWidet(
                               title: StringManager.inCorrect,
-                              reslt: (state.response.data?.wrong ?? 0).toStringAsFixed(0),
+                              reslt: (state.response.data?.wrong ?? 0)
+                                  .toStringAsFixed(0),
                               color: ColorManager.failureColor,
                             ),
                           ],
@@ -110,11 +123,19 @@ class ExamScoreScreen extends StatelessWidget {
                 },
               ),
 
-
               SizedBox(height: 80.h),
               CustomTextButton(
-                onPressed: () {
-                  // الانتقال إلى شاشة النتائج
+                onPressed: () async{
+                  List<ExamResultModel> results = await ExamResultsStorage.getResults();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AnswerScreen(
+                        questions: results.last.questions ?? [],
+                        answersList: results.last.answers??[],
+                      ),
+                    ),
+                  );
                 },
                 text: StringManager.showResults,
                 color: ColorManager.primaryColor,
@@ -123,7 +144,10 @@ class ExamScoreScreen extends StatelessWidget {
               SizedBox(height: 24.h),
               CustomTextButton(
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => QuizScreen(examID,exam)));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => QuizScreen(examID, exam)));
                 },
                 text: StringManager.startAgain,
                 color: Colors.white,
