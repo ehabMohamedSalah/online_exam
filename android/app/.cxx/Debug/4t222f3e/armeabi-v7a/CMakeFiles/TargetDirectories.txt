@@ -1,0 +1,2 @@
+F:/route project/online_exam/android/app/.cxx/Debug/4t222f3e/armeabi-v7a/CMakeFiles/edit_cache.dir
+F:/route project/online_exam/android/app/.cxx/Debug/4t222f3e/armeabi-v7a/CMakeFiles/rebuild_cache.dir
