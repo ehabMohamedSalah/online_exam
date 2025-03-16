@@ -11,7 +11,7 @@ class AnswerScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Answers")),
+      appBar: AppBar(title: Text("Answers ")),
       body: ListView.builder(
         itemCount: questions.length,
         itemBuilder: (context, index) {
