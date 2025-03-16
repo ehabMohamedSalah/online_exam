@@ -1,4 +1,3 @@
-// main.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:online_exam/data/model/profile_tab/image_provider_model.dart';
@@ -26,10 +25,8 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   Future<String> getInitialRoute() async {
-    String? token = await ExamResultsStorage.getUserToken();
-    return token != null && token.isNotEmpty
-        ? RouteManager.homeScreen
-        : RouteManager.loginScreen;
+    bool isRemembered = await ExamResultsStorage.isUserRemembered();
+    return isRemembered ? RouteManager.homeScreen : RouteManager.loginScreen;
   }
 
   @override
@@ -43,7 +40,11 @@ class MyApp extends StatelessWidget {
           future: getInitialRoute(),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
-              return Center(child: CircularProgressIndicator());
+              return MaterialApp(
+                home: Scaffold(
+                  body: Center(child: CircularProgressIndicator()),
+                ),
+              );
             }
 
             return MultiProvider(
@@ -58,7 +59,7 @@ class MyApp extends StatelessWidget {
                   RouteManager.forgetPassScreen: (context) => ForgetPasswordScreen(),
                   RouteManager.signUpscreen: (context) => Signupscreen(),
                 },
-                initialRoute: snapshot.data!,
+                initialRoute: snapshot.data,
                 theme: AppTheme.lightTheme,
               ),
             );

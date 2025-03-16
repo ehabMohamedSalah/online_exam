@@ -8,6 +8,7 @@ import 'package:online_exam/core/utils/routes_manager.dart';
 import 'package:online_exam/presentation/auth/login/view_model/login_view_model_cubit.dart';
 import '../../../../core/constant.dart';
 import '../../../../core/di/di.dart';
+import '../../../../core/local_storage/exam_result_storage.dart';
 import '../../../../core/resuable-comp/custom_text_field.dart';
 import '../../../../core/resuable-comp/text_button.dart';
 import '../../../../core/utils/string_manager.dart';
@@ -94,6 +95,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             onChanged: (bool? newValue) {
                               setState(() {
                                 rememberMe = newValue ?? false;
+                                ExamResultsStorage.rememberUser(rememberMe);
                               });
                             },
                           ),

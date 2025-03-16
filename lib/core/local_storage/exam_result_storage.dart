@@ -5,12 +5,14 @@ import '../../data/model/result_model/result_model_response.dart';
 class ExamResultsStorage {
   static const String _keyResults = "exam_results";
   static const String _keyUserToken = "user_token"; // 🔹 مفتاح تخزين التوكن
+  static const String _keyIsRemembered = "is_remembered";
 
   // ✅ حفظ `userToken` عند تسجيل الدخول
   static Future<void> saveUserToken(String token) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_keyUserToken, token);
   }
+
   // ✅ استرجاع التوكن من التخزين المحلي
   static Future<String?> getUserToken() async {
     final prefs = await SharedPreferences.getInstance();
@@ -43,5 +45,16 @@ class ExamResultsStorage {
 
     String jsonString = json.encode(results.map((result) => result.toJson()).toList());
     await prefs.setString(_keyResults, jsonString);
+  }
+
+
+
+  static Future<void> rememberUser(bool remember) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_keyIsRemembered, remember);
+  }
+  static Future<bool> isUserRemembered() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool(_keyIsRemembered) ?? false;
   }
 }
