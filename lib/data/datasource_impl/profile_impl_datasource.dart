@@ -3,7 +3,7 @@ import 'package:injectable/injectable.dart';
 import 'package:online_exam/core/api/api_manager.dart';
 import 'package:online_exam/core/api/api_result.dart';
 import 'package:online_exam/core/api/endpoints.dart';
-import 'package:online_exam/core/utils/string_manager.dart';
+import 'package:online_exam/core/local_storage/exam_result_storage.dart';
 import 'package:online_exam/data/datasource_contract/profile_datasource.dart';
 import 'package:online_exam/data/model/profile_tab/change_password/change_password_response.dart';
 import 'package:online_exam/data/model/profile_tab/profile_response.dart';
@@ -22,10 +22,11 @@ class ProfileDatasourceImpl extends ProfileDatasource {
   Future<ApiResult<UserProfileEntity>> getProfileInfo(
       {required String id}) async {
     try {
+      var userToken = await ExamResultsStorage.getUserToken();
       var response = await apiManager.getRequest(
         Endpoint: EndPoint.profileInfoEndpoint,
         headers: {
-          "token": StringManager.token,
+          "token": userToken,
         },
       );
 
@@ -60,12 +61,10 @@ class ProfileDatasourceImpl extends ProfileDatasource {
     required String phone,
   }) async {
     try {
+      var userToken = await ExamResultsStorage.getUserToken();
       var response = await apiManager.put(
         Endpoint: EndPoint.editProfileEndpoint,
-        headers: {
-          "Content-Type": "application/json",
-          "token":StringManager.token
-        },
+        headers: {"Content-Type": "application/json", "token": userToken},
         data: {
           "username": username,
           "firstName": firstName,
