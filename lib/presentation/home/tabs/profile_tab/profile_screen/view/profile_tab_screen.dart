@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:online_exam/core/api/api_result.dart';
 import 'package:online_exam/core/di/di.dart';
+import 'package:online_exam/core/local_storage/exam_result_storage.dart';
 import 'package:online_exam/core/resuable-comp/custom_text_field.dart';
 import 'package:online_exam/core/resuable-comp/text_button.dart';
 import 'package:online_exam/core/utils/colors_manager.dart';
@@ -11,6 +12,7 @@ import 'package:online_exam/core/utils/string_manager.dart';
 import 'package:online_exam/data/model/profile_tab/image_provider_model.dart';
 import 'package:online_exam/data/model/profile_tab/user_profile.dart';
 import 'package:online_exam/domain/entity/profile_tab/profile_entry/profile_response_entity.dart';
+import 'package:online_exam/presentation/auth/login/view/login_screen.dart';
 import 'dart:io';
 import 'package:online_exam/presentation/home/tabs/profile_tab/change_password/view/new_password.dart';
 import 'package:online_exam/presentation/home/tabs/profile_tab/edit_profile_screen/view/edit_profile_tab_screen.dart';
@@ -289,6 +291,22 @@ class _ProfileTabScreenState extends State<ProfileTabScreen> {
                     color: ColorManager.primaryColor,
                     textColor: Colors.white,
                   ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  CustomTextButton(
+                    text: StringManager.logout,
+                    onPressed: () async {
+                      await ExamResultsStorage.deleteUserToken();
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (context) => LoginScreen()),
+                            (route) => false,
+                      );
+                    },
+                    color: ColorManager.primaryColor,
+                    textColor: Colors.white,
+                  )
                 ],
               ),
             ),

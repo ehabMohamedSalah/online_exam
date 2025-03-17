@@ -13,6 +13,11 @@ class ExamResultsStorage {
     await prefs.setString(_keyUserToken, token);
   }
 
+  static Future<void> deleteUserToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(_keyUserToken);
+  }
+
   // ✅ استرجاع التوكن من التخزين المحلي
   static Future<String?> getUserToken() async {
     final prefs = await SharedPreferences.getInstance();

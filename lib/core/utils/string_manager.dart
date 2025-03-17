@@ -1,6 +1,7 @@
 class StringManager {
   static const String token="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YjI0Y2Q1ODZhMDI0ZjA2ZWEyNzc3YyIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzQwMzk5MDM3fQ.HQj0mnNvDqagVIawpNudo2pnLxOm6I4gvPZrMlKp2p0";
   static const String login = "Login";
+  static const String logout = "Logout";
   static const String email = "Email";
   static const String enterYourEmail = "Enter you email";
   static const String notValidEmail = "Dont't valid account";
